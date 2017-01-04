@@ -15,6 +15,15 @@ It will create the TLS certs and create a `windows` Docker machine for your
 $ vagrant up
 ```
 
+You need the Vagrant basebox preinstalled as it is not available at Atlas. To build it yourself follow these commands:
+
+```bash
+$ git clone https://github.com/StefanScherer/packer-windows
+$ cd packer-windows
+$ packer build --only=vmware-iso windows_2016_docker.json
+$ vagrant box add windows_2016_docker windows_2016_docker_virtualbox.box
+```
+
 ## List your new Docker machine
 
 ```bash
@@ -46,3 +55,5 @@ Just use `C:$(pwd)` to prepend a drive letter.
 ```bash
 $ docker run -it -v C:$(pwd):C:$(pwd) microsoft/windowsservercore powershell
 ```
+
+Yes, this mounts the current directory through the Windows 2016 VM into the Windows Container.
