@@ -5,15 +5,7 @@ with Windows containers.
 
 Tested with Vagrant 1.9.1 and VMware Fusion Pro 8.5.3 on a MacBook Pro.
 
-## Create the Docker Machine
-
-Spin up the headless Vagrant box with Windows Server 2016 and Docker installed.
-It will create the TLS certs and create a `windows` Docker machine for your
-`docker-machine` binary on your Mac.
-
-```bash
-$ vagrant up
-```
+#### Before you begin
 
 You need the Vagrant basebox preinstalled as it is not available at Atlas. To build it yourself follow these commands:
 
@@ -22,6 +14,16 @@ $ git clone https://github.com/StefanScherer/packer-windows
 $ cd packer-windows
 $ packer build --only=vmware-iso windows_2016_docker.json
 $ vagrant box add windows_2016_docker windows_2016_docker_virtualbox.box
+```
+
+## Create the Docker Machine
+
+Spin up the headless Vagrant box with Windows Server 2016 and Docker installed.
+It will create the TLS certs and create a `windows` Docker machine for your
+`docker-machine` binary on your Mac.
+
+```bash
+$ vagrant up
 ```
 
 ## List your new Docker machine
