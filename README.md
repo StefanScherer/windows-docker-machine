@@ -44,10 +44,52 @@ Currently there is [an issue](https://github.com/docker/machine/issues/3943) tha
 $ eval $(docker-machine env windows)
 ```
 
+Now your Mac Docker client talks to the Windows Docker engine:
+
+```bash
+$ docker version
+Client:
+ Version:      1.12.5
+ API version:  1.24
+ Go version:   go1.6.4
+ Git commit:   7392c3b
+ Built:        Fri Dec 16 06:14:34 2016
+ OS/Arch:      darwin/amd64
+
+Server:
+ Version:      1.13.0-rc4
+ API version:  1.25
+ Go version:   go1.7.3
+ Git commit:   88862e7
+ Built:        Sat Dec 17 01:34:17 2016
+ OS/Arch:      windows/amd64
+```
+
 ## Switch back to Docker for Mac
 
 ```bash
 $ eval $(docker-machine env -unset)
+```
+
+This removes all DOCKER environment variables and you can use your Docker for Mac installation.
+
+```bash
+$ docker version
+Client:
+ Version:      1.12.5
+ API version:  1.24
+ Go version:   go1.6.4
+ Git commit:   7392c3b
+ Built:        Fri Dec 16 06:14:34 2016
+ OS/Arch:      darwin/amd64
+
+Server:
+ Version:      1.12.5
+ API version:  1.24
+ Go version:   go1.6.4
+ Git commit:   7392c3b
+ Built:        Fri Dec 16 06:14:34 2016
+ OS/Arch:      linux/amd64
 ```
 
 ## Mounting volumes from your Mac
