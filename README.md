@@ -13,7 +13,7 @@ You need the Vagrant basebox preinstalled as it is not available at Atlas. To bu
 $ git clone https://github.com/StefanScherer/packer-windows
 $ cd packer-windows
 $ packer build --only=vmware-iso windows_2016_docker.json
-$ vagrant box add windows_2016_docker windows_2016_docker_virtualbox.box
+$ vagrant box add windows_2016_docker windows_2016_docker_vmware.box
 ```
 
 ## Create the Docker Machine
