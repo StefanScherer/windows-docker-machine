@@ -57,11 +57,11 @@ Now your Mac Docker client talks to the Windows Docker engine:
 ```bash
 $ docker version
 Client:
- Version:      1.12.5
+ Version:      1.12.6
  API version:  1.24
  Go version:   go1.6.4
- Git commit:   7392c3b
- Built:        Fri Dec 16 06:14:34 2016
+ Git commit:   78d1802
+ Built:        Wed Jan 11 00:23:16 2017
  OS/Arch:      darwin/amd64
 
 Server:
@@ -84,19 +84,19 @@ This removes all DOCKER environment variables and you can use your Docker for Ma
 ```bash
 $ docker version
 Client:
- Version:      1.12.5
+ Version:      1.12.6
  API version:  1.24
  Go version:   go1.6.4
- Git commit:   7392c3b
- Built:        Fri Dec 16 06:14:34 2016
+ Git commit:   78d1802
+ Built:        Wed Jan 11 00:23:16 2017
  OS/Arch:      darwin/amd64
 
 Server:
- Version:      1.12.5
+ Version:      1.12.6
  API version:  1.24
  Go version:   go1.6.4
- Git commit:   7392c3b
- Built:        Fri Dec 16 06:14:34 2016
+ Git commit:   78d1802
+ Built:        Wed Jan 11 00:23:16 2017
  OS/Arch:      linux/amd64
 ```
 
@@ -116,12 +116,23 @@ Spin up the headless Vagrant box with Windows Server 2016 and Docker installed.
 It will create the TLS certs and create a `windows` Docker machine for your
 `docker-machine` binary on your Windows host.
 
+If you haven't worked with `docker-machine` yet, create the `.docker` directory in your user profile manually.
+
+```powershell
+PS C:\> mkdir $env:USERPROFILE\.docker
+```
+
 ### Create the Docker Machine
+
+Choose your hypervisor and start the VM
 
 ```powershell
 PS C:\> vagrant up --provider vmware_workstation
 PS C:\> vagrant up --provider virtualbox
+PS C:\> vagrant up --provider hyperv
 ```
+
+Notice: The provider `hyperv` does mount the volumes with SMB into the Win2016 VM. It seems that there is a problem mounting that further into a Windows container. The provisioning (creating the TLS certs and copying them back to the Windows host) will fail.
 
 ### List your new Docker machine
 

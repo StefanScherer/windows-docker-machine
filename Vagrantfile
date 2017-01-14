@@ -42,4 +42,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     v.cpus = 2
     v.linked_clone = true
   end
+
+  config.vm.provider "hyperv" do |v|
+    v.cpus = 2
+    v.maxmemory = 2048
+    v.differencing_disk = true
+  end
 end
