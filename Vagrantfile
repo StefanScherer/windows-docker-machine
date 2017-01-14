@@ -18,8 +18,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   begin
     OptionParser.new do |opts|
       opts.on("--provider PROVIDER", String, "") do |provider|
-        p "Add VirtualBox network"
-        config.vm.network :private_network, ip: "192.168.99.90", gateway: "192.168.99.1"
+        if provider == 'virtualbox'
+          config.vm.network :private_network, ip: "192.168.99.90", gateway: "192.168.99.1"
+        end
       end
     end.parse!
   rescue OptionParser::InvalidOption => e
