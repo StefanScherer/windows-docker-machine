@@ -12,6 +12,11 @@ if (!$machineIp) {
     ).IPAddress
 }
 
+$homeDir = $machineHome
+if ($machineHome.startsWith('/')) {
+  $homeDir = "C:$machineHome" # /Users/stefan from Mac -> C:/Users/stefan
+}
+
 docker run --rm `
   -e SERVER_NAME=$(hostname) `
   -e IP_ADDRESSES=$ips `
@@ -19,7 +24,7 @@ docker run --rm `
   -e MACHINE_NAME=$machineName `
   -e MACHINE_IP=$machineIp `
   -v "$env:USERPROFILE\.docker:C:\Users\ContainerAdministrator\.docker" `
-  -v "C:$($machineHome)\.docker:C:\machine\.docker" `
+  -v "$homeDir\.docker:C:\machine\.docker" `
   -v "C:\ProgramData\docker:C:\ProgramData\docker" `
   stefanscherer/dockertls-windows
 
