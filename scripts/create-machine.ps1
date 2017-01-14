@@ -8,8 +8,10 @@ $ips = ((Get-NetIPAddress -AddressFamily IPv4).IPAddress) -Join ','
 
 if (!$machineIp) {
   $machineIp=(Get-NetIPAddress -AddressFamily IPv4 `
-    | Where-Object -FilterScript { $_.InterfaceAlias -Ne "vEthernet (HNS Internal NIC)" -And $_.IPAddress -Ne "127.0.0.1" } `
-    ).IPAddress
+    | Where-Object -FilterScript { $_.InterfaceAlias -Ne "vEthernet (HNS Internal NIC)" `
+      -And $_.IPAddress -Ne "127.0.0.1" `
+      -And $_.IPAddress -Ne "10.0.2.15" `
+    }).IPAddress
 }
 
 $homeDir = $machineHome
