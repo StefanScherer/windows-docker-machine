@@ -9,6 +9,8 @@ Tested environments
     * VirtualBox 5.1.12
   * Windows with Vagrant 1.9.1
     * VMware Workstation Pro 12.5.2
+    * (VirtualBox see issue #2)
+    * (Hyper-V see issue #1)
 
 #### Before you begin
 
