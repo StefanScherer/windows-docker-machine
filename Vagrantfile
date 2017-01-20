@@ -13,6 +13,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.synced_folder ENV['HOME'], ENV['HOME']
 
   config.vm.provision "shell", path: "scripts/create-machine.ps1", privileged: false, args: "-machineHome #{ENV['HOME']} -machineName windows"
+  config.vm.provision "shell", path: "scripts/set-experimental.ps1", privileged: false
 
   # Add the docker-machine subnet 192.168.99.* only for VirtualBox
   begin
