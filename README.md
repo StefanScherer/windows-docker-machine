@@ -1,6 +1,6 @@
 # Windows Docker Machine
 
-This Vagrant environment creates a Docker Machine to work from your MacBook
+This Vagrant environment creates a Docker Machine to work on your MacBook
 with Windows containers. You can easily switch between Docker for Mac Linux containers and the Windows containers.
 
 ![Windows Docker Machine on macOS](images/windows_docker_machine.png)
