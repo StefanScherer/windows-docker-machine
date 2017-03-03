@@ -12,6 +12,8 @@ Tested environments
     * (VirtualBox see issue [#2](https://github.com/StefanScherer/windows-docker-machine/issues/2))
     * (Hyper-V see issue [#1](https://github.com/StefanScherer/windows-docker-machine/issues/1))
 
+![Windows Docker Machine on macOS](images/windows_docker_machine.png)
+
 #### Before you begin
 
 You need the Vagrant basebox preinstalled as it is not available at Atlas. To build it yourself follow these commands:
@@ -23,10 +25,10 @@ $ packer build --only=vmware-iso windows_2016_docker.json
 $ vagrant box add windows_2016_docker windows_2016_docker_vmware.box
 ```
 
-## OSX
+## macOS
 ### Create the Docker Machine
 
-Spin up the headless Vagrant box with Windows Server 2016 and Docker installed.
+Spin up the headless Vagrant box with Windows Server 2016 and Docker EE installed.
 It will create the TLS certs and create a `windows` Docker machine for your
 `docker-machine` binary on your Mac.
 
@@ -116,7 +118,7 @@ Yes, this mounts the current directory through the Windows 2016 VM into the Wind
 
 ## Windows
 
-Spin up the headless Vagrant box with Windows Server 2016 and Docker installed.
+Spin up the headless Vagrant box with Windows Server 2016 and Docker EE installed.
 It will create the TLS certs and create a `windows` Docker machine for your
 `docker-machine` binary on your Windows host.
 
