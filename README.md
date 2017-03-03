@@ -33,7 +33,7 @@ $ packer build --only=vmware-iso windows_2016_docker.json
 $ vagrant box add windows_2016_docker windows_2016_docker_vmware.box
 ```
 
-## macOS
+## Working on macOS
 ### Create the Docker Machine
 
 Spin up the headless Vagrant box with Windows Server 2016 and Docker EE installed.
@@ -124,7 +124,7 @@ $ docker run -it -v C:$(pwd):C:$(pwd) microsoft/windowsservercore powershell
 
 Yes, this mounts the current directory through the Windows 2016 VM into the Windows Container.
 
-## Windows
+## Working on Windows
 
 Spin up the headless Vagrant box with Windows Server 2016 and Docker EE installed.
 It will create the TLS certs and create a `windows` Docker machine for your
