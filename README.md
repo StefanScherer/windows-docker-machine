@@ -16,7 +16,15 @@ Tested environments
 
 #### Before you begin
 
-You need the Vagrant basebox preinstalled as it is not available at Atlas. To build it yourself follow these commands:
+First you need the Windows Server 2016 VM for your hypervisor. I prefer "Infrastructure as Code", so every build step is available on GitHub.
+
+![packer vagrant docker](images/packer_vagrant_docker.png)
+
+1. **packer build** to build a Vagrant base box, it's like a Docker image, but for Vagrant VM's
+2. **vagrant up** to create a running VM instance of Windows Server 2016
+3. **docker run** to run Windows containers in that Windows VM
+
+Step 1 can be done with these steps:
 
 ```bash
 $ git clone https://github.com/StefanScherer/packer-windows
