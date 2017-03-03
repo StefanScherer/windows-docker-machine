@@ -4,10 +4,10 @@ This Vagrant environment creates a Docker Machine to work from your MacBook
 with Windows containers.
 
 Tested environments
-  * OSX with Vagrant 1.9.1
+  * OSX with Vagrant 1.9.2
     * VMware Fusion Pro 8.5.3
     * VirtualBox 5.1.12
-  * Windows with Vagrant 1.9.1
+  * Windows with Vagrant 1.9.2
     * VMware Workstation Pro 12.5.2
     * (VirtualBox see issue [#2](https://github.com/StefanScherer/windows-docker-machine/issues/2))
     * (Hyper-V see issue [#1](https://github.com/StefanScherer/windows-docker-machine/issues/1))
@@ -59,19 +59,19 @@ Now your Mac Docker client talks to the Windows Docker engine:
 ```bash
 $ docker version
 Client:
- Version:      1.13.0
- API version:  1.25
- Go version:   go1.7.3
- Git commit:   49bf474
- Built:        Wed Jan 18 16:20:26 2017
+ Version:      17.03.0-ce
+ API version:  1.26
+ Go version:   go1.7.5
+ Git commit:   60ccb22
+ Built:        Thu Feb 23 10:40:59 2017
  OS/Arch:      darwin/amd64
 
 Server:
- Version:      1.13.0
- API version:  1.25 (minimum version 1.24)
- Go version:   go1.7.3
- Git commit:   49bf474
- Built:        Wed Jan 18 16:20:26 2017
+ Version:      17.03.0-ee-1
+ API version:  1.26 (minimum version 1.24)
+ Go version:   go1.7.5
+ Git commit:   9094a76
+ Built:        Wed Mar  1 00:49:51 2017
  OS/Arch:      windows/amd64
  Experimental: true
 ```
@@ -87,19 +87,19 @@ This removes all DOCKER environment variables and you can use your Docker for Ma
 ```bash
 $ docker version
 Client:
- Version:      1.13.0
- API version:  1.25
- Go version:   go1.7.3
- Git commit:   49bf474
- Built:        Wed Jan 18 16:20:26 2017
+ Version:      17.03.0-ce
+ API version:  1.26
+ Go version:   go1.7.5
+ Git commit:   60ccb22
+ Built:        Thu Feb 23 10:40:59 2017
  OS/Arch:      darwin/amd64
 
 Server:
- Version:      1.13.0
- API version:  1.25 (minimum version 1.12)
- Go version:   go1.7.3
- Git commit:   49bf474
- Built:        Wed Jan 18 16:20:26 2017
+ Version:      17.03.0-ce
+ API version:  1.26 (minimum version 1.12)
+ Go version:   go1.7.5
+ Git commit:   3a232c8
+ Built:        Tue Feb 28 07:52:04 2017
  OS/Arch:      linux/amd64
  Experimental: true
 ```
@@ -144,7 +144,6 @@ Notice: The provider `hyperv` does mount the volumes with SMB into the Win2016 V
 PS C:\> docker-machine ls
 NAME      ACTIVE   DRIVER         STATE     URL                          SWARM   DOCKER    ERRORS
 dev       -        virtualbox     Running   tcp://192.168.99.100:2376            v1.13.0
-linux     -        vmwarefusion   Running                                        Unknown
 windows   *        generic        Running   tcp://192.168.254.135:2376           Unknown   
 ```
 
@@ -159,19 +158,19 @@ Now your Windows Docker client talks to the Windows Docker engine:
 ```powershell
 PS C:\> docker version
 Client:
- Version:      1.13.0
- API version:  1.25
- Go version:   go1.7.3
- Git commit:   49bf474
- Built:        Wed Jan 18 16:20:26 2017
+ Version:      17.03.0-ce
+ API version:  1.26
+ Go version:   go1.7.5
+ Git commit:   60ccb22
+ Built:        Thu Feb 23 10:40:59 2017
  OS/Arch:      windows/amd64
 
 Server:
- Version:      1.13.0
- API version:  1.25 (minimum version 1.24)
- Go version:   go1.7.3
- Git commit:   49bf474
- Built:        Wed Jan 18 16:20:26 2017
+ Version:      17.03.0-ee-1
+ API version:  1.26 (minimum version 1.24)
+ Go version:   go1.7.5
+ Git commit:   9094a76
+ Built:        Wed Mar  1 00:49:51 2017
  OS/Arch:      windows/amd64
  Experimental: true
 ```
@@ -184,22 +183,22 @@ PS C:\> docker-machine env -unset | iex
 
 This removes all DOCKER environment variables and you can use your Docker for Windows installation.
 
-```bash
-$ docker version
+```powershell
+PS C:\> docker version
 Client:
- Version:      1.13.0
- API version:  1.25
- Go version:   go1.7.3
- Git commit:   49bf474
- Built:        Wed Jan 18 16:20:26 2017
+ Version:      17.03.0-ce
+ API version:  1.26
+ Go version:   go1.7.5
+ Git commit:   60ccb22
+ Built:        Thu Feb 23 10:40:59 2017
  OS/Arch:      windows/amd64
 
 Server:
- Version:      1.13.0
- API version:  1.25 (minimum version 1.24)
- Go version:   go1.7.3
- Git commit:   49bf474
- Built:        Wed Jan 18 16:20:26 2017
+ Version:      17.03.0-ce
+ API version:  1.26 (minimum version 1.12)
+ Go version:   go1.7.5
+ Git commit:   3a232c8
+ Built:        Tue Feb 28 07:52:04 2017
  OS/Arch:      linux/amd64
  Experimental: true
 ```
