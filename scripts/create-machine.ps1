@@ -30,9 +30,11 @@ docker run --rm `
   -v "C:\ProgramData\docker:C:\ProgramData\docker" `
   stefanscherer/dockertls-windows
 
+Write-host Restarting Docker
 stop-service docker
 dockerd --unregister-service
 dockerd --register-service
 start-service docker
 
+Write-Host Opening Docker TLS port
 & netsh advfirewall firewall add rule name="Docker TLS" dir=in action=allow protocol=TCP localport=2376
