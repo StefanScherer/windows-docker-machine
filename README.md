@@ -114,7 +114,7 @@ Server:
  Experimental: true
 ```
 
-### Mounting volumes from your Mac
+### Mounting volumes from your Mac machine
 
 Just use `C:$(pwd)` to prepend a drive letter.
 
@@ -213,9 +213,9 @@ Server:
  Experimental: true
 ```
 
-### Mounting volumes from your Windows
+### Mounting volumes from your Windows machine
 
-Just use `C:$(pwd)` to prepend a drive letter.
+Just use `$(pwd)` in PowerShell.
 
 ```bash
 $ docker run -it -v "$(pwd):$(pwd)" microsoft/windowsservercore powershell
