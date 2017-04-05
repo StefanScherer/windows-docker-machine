@@ -34,6 +34,9 @@ $ vagrant box add windows_2016_docker windows_2016_docker_vmware.box
 ```
 
 ## Working on macOS
+
+![docker on mac](images/docker-on-mac.gif)
+
 ### Create the Docker Machine
 
 Spin up the headless Vagrant box with Windows Server 2016 and Docker EE installed.
