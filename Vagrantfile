@@ -17,18 +17,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # config.vm.provision "shell", path: "scripts/update-docker-rc.ps1"
   config.vm.provision "shell", path: "scripts/update-docker-ce.ps1"
 
-  # Add the docker-machine subnet 192.168.99.* only for VirtualBox
-  begin
-    OptionParser.new do |opts|
-      opts.on("--provider PROVIDER", String, "") do |provider|
-        if provider == 'virtualbox'
-          config.vm.network :private_network, ip: "192.168.99.90", gateway: "192.168.99.1"
-        end
-      end
-    end.parse!
-  rescue OptionParser::InvalidOption => e
-  end
-
   ["vmware_fusion", "vmware_workstation"].each do |provider|
     config.vm.provider provider do |v, override|
       v.gui = false
@@ -39,11 +27,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
   end
 
-  config.vm.provider "virtualbox" do |v|
+  config.vm.provider "virtualbox" do |v, override|
     v.gui = false
     v.memory = 2048
     v.cpus = 2
     v.linked_clone = true
+    override.vm.network :private_network, ip: "192.168.99.90", gateway: "192.168.99.1"
   end
 
   config.vm.provider "hyperv" do |v|
