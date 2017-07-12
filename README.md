@@ -44,6 +44,7 @@ It will create the TLS certs and create a `windows` Docker machine for your
 `docker-machine` binary on your Mac.
 
 ```bash
+$ vagrant init windows_2016_docker
 $ vagrant up --provider vmware_fusion
 $ vagrant up --provider virtualbox
 ```
