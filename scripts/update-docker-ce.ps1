@@ -1,7 +1,7 @@
 $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
 
-$version = "17.06.0-ce"
+$version = "17.07.0-ce"
 if ($(docker --version).StartsWith("Docker version $version")) {
   Write-Host Already updated.
   exit 0;
