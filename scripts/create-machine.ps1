@@ -9,7 +9,7 @@ $ipAddresses = ((Get-NetIPAddress -AddressFamily IPv4).IPAddress) -Join ','
 if (!$machineIp) {
   $machineIp=(Get-NetIPAddress -AddressFamily IPv4 `
     | Where-Object -FilterScript { `
-      ( ! ($_.InterfaceAlias).StartsWith("vEthernet (HNS Internal NIC)") ) `
+      ( ! ($_.InterfaceAlias).StartsWith("vEthernet (") ) `
       -And $_.IPAddress -Ne "127.0.0.1" `
       -And $_.IPAddress -Ne "10.0.2.15" `
     }).IPAddress
