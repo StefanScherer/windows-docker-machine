@@ -60,6 +60,8 @@ It will create the TLS certs and create a `2016` Docker machine for your
 `docker-machine` binary on your Mac.
 
 ```bash
+$ git clone https://github.com/StefanScherer/windows-docker-machine
+$ cd windows-docker-machine
 $ vagrant up --provider vmware_fusion 2016
 $ vagrant up --provider virtualbox 2016
 ```
@@ -160,6 +162,8 @@ PS C:\> mkdir $env:USERPROFILE\.docker
 Choose your hypervisor and start the VM
 
 ```powershell
+PS C:\> git clone https://github.com/StefanScherer/windows-docker-machine
+PS C:\> cd windows-docker-machine
 PS C:\> vagrant up --provider vmware_workstation 2016
 PS C:\> vagrant up --provider virtualbox 2016
 PS C:\> vagrant up --provider hyperv 2016
