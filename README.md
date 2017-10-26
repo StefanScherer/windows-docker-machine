@@ -1,7 +1,7 @@
 # Windows Docker Machine
 
 This Vagrant environment creates a Docker Machine to work on your MacBook
-with Windows containers. You can easily switch between Docker for Mac Linux containers and the Windows containers. There is a special [insider-docker-machine](https://github.com/StefanScherer/insider-docker-machine) repo to play with Windows Server Insider Preview builds.
+with Windows containers. You can easily switch between Docker for Mac Linux containers and the Windows containers.
 
 ![Windows Docker Machine on macOS](images/windows_docker_machine.png)
 
@@ -254,3 +254,5 @@ Here is a list of `docker-machine` commands and the equivalent Vagrant command.
 | `docker-machine start 2016` | `vagrant up 2016`
 | `docker-machine ssh 2016` | `vagrant rdp 2016`
 | `docker-machine rm 2016` | `vagrant destroy 2016` |
+
+## Insider builds
