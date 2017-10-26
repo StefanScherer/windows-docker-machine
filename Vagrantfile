@@ -6,24 +6,34 @@ VAGRANTFILE_API_VERSION = "2"
 Vagrant.require_version ">= 1.8.4"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.vm.box          = "StefanScherer/windows_2016_docker"
   config.vm.communicator = "winrm"
 
   config.vm.synced_folder ".", "/vagrant", disabled: true
   config.vm.synced_folder ENV['HOME'], ENV['HOME']
 
-  config.vm.provision "shell", path: "scripts/create-machine.ps1", args: "-machineHome #{ENV['HOME']} -machineName windows"
-  # config.vm.provision "shell", path: "scripts/set-experimental.ps1"
-  # config.vm.provision "shell", path: "scripts/update-docker-rc.ps1"
-  config.vm.provision "shell", path: "scripts/update-docker-ce.ps1"
+  config.vm.define "2016" do |cfg|
+    cfg.vm.box     = "StefanScherer/windows_2016_docker"
+    cfg.vm.provision "shell", path: "scripts/create-machine.ps1", args: "-machineHome #{ENV['HOME']} -machineName 2016"
+  end
 
+  config.vm.define "1709", autostart: false do |cfg|
+    cfg.vm.box     = "windows_server_1709"
+    cfg.vm.provision "shell", path: "scripts/create-machine.ps1", args: "-machineHome #{ENV['HOME']} -machineName 1709"
+  end
+
+  config.vm.define "insider", autostart: false do |cfg|
+    cfg.vm.box     = "windows_2016_insider"
+    cfg.vm.provision "shell", path: "scripts/create-machine.ps1", args: "-machineHome #{ENV['HOME']} -machineName insider"
+  end
+  
   ["vmware_fusion", "vmware_workstation"].each do |provider|
     config.vm.provider provider do |v, override|
-      v.gui = false
+      v.gui = true
       v.memory = 2048
       v.cpus = 2
       v.enable_vmrun_ip_lookup = false
       v.linked_clone = true
+      v.vmx["vhv.enable"] = "TRUE"
     end
   end
 
