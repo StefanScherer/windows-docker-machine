@@ -3,7 +3,17 @@
 This Vagrant environment creates a Docker Machine to work on your MacBook
 with Windows containers. You can easily switch between Docker for Mac Linux containers and the Windows containers.
 
-![Windows Docker Machine on macOS](images/windows_docker_machine.png)
+![docker on mac](images/docker-on-mac.gif)
+
+## Three flavors
+
+There are three flavors or versions of Windows Server 2016. This is where you decide which Vagrant VM should be started.
+
+* `2016` - Windows Server 2016 (10.0.14393) LTS release
+* `1709` - Windows Server, version 1709 (10.0.16299) Semi annual release
+* `insider` - Windows Server Insider builds
+
+So with a `vagrant up 2016` you spin up the LTS version, with `vagrant up 1709` the 1709 version and with `vagrant up insider` the Insider build.
 
 Tested environments
   * macOS with Vagrant 2.0.0
@@ -24,15 +34,7 @@ First you need the Windows Server 2016 VM for your hypervisor. I prefer "Infrast
 2. **vagrant up** to create a running VM instance of Windows Server 2016
 3. **docker run** to run Windows containers in that Windows VM
 
-## Three flavors
 
-There are three flavors or versions of Windows Server 2016. This is where you decide which Vagrant VM should be started.
-
-* `2016` - Windows Server 2016 (10.0.14393) LTS release
-* `1709` - Windows Server, version 1709 (10.0.16299) Semi annual release
-* `insider` - Windows Server Insider builds
-
-So with a `vagrant up 2016` you spin up the LTS version, with `vagrant up 1709` the 1709 version and with `vagrant up insider` the Insider build.
 
 Step 1 can be done with these steps:
 
@@ -50,8 +52,6 @@ $ vagrant box add windows_2016_insider windows_2016_insider_vmware.box
 Of course you can build only the box version you need.
 
 ## Working on macOS
-
-![docker on mac](images/docker-on-mac.gif)
 
 ### Create the Docker Machine
 
