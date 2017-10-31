@@ -145,6 +145,17 @@ $ docker run -it -v C:$(pwd):C:$(pwd) microsoft/windowsservercore powershell
 
 Yes, this mounts the current directory through the Windows 2016 VM into the Windows Container.
 
+### Accessing published ports of Windows containers
+
+When you run Windows containers with publish ports then you can use the IP address of the Windows Docker host to access it. The `docker-machine` binary can give your the IP address with a command.
+
+Example: Run the whoami Windows container and open it in the default macOS browser.
+
+```
+$ docker run -d -p 8080:8080 stefanscherer/whoami
+$ open http://$(docker-machine ip 2016):8080
+```
+
 ## Working on Windows
 
 Spin up the headless Vagrant box with Windows Server 2016 and Docker EE installed.
@@ -240,11 +251,22 @@ Server:
 
 Just use `$(pwd)` in PowerShell.
 
-```bash
-$ docker run -it -v "$(pwd):$(pwd)" microsoft/windowsservercore powershell
+```powershell
+PS C:\> docker run -it -v "$(pwd):$(pwd)" microsoft/windowsservercore powershell
 ```
 
 Yes, this mounts the current directory through the Windows 2016 VM into the Windows Container.
+
+### Accessing published ports of Windows containers
+
+When you run Windows containers with publish ports then you can use the IP address of the Windows Docker host to access it. The `docker-machine` binary can give your the IP address with a command.
+
+Example: Run the whoami Windows container and open it in the default browser.
+
+```powershell
+PS C:\> docker run -d -p 8080:8080 stefanscherer/whoami
+PS C:\> start http://$(docker-machine ip 2016):8080
+```
 
 ## Further commands
 
