@@ -282,3 +282,37 @@ Here is a list of `docker-machine` commands and the equivalent Vagrant command.
 | `docker-machine rm 2016` | `vagrant destroy 2016` |
 
 ## Insider builds
+
+If you want to follow the Windows Server Insider builds then this is for you. It is tested on a Mac with the following steps.
+
+1. Register at Windows Insider program https://insider.windows.com
+
+2. Download the Windows Server ISO from https://www.microsoft.com/en-us/software-download/windowsinsiderpreviewserver?wa=wsignin1.0
+
+3. Build the Vagrant basebox with Packer
+
+```bash
+git clone https://github.com/StefanScherer/packer-windows
+cd packer-windows
+packer build --only=vmware-iso --var iso_url=~/Downloads/Windows_InsiderPreview_Server_2_16278.iso windows_2016_insider.json
+vagrant box add windows_2016_insider windows_2016_insider_vmware.box
+```
+
+Then spin up your Insider machine with
+
+```
+vagrant up insider
+```
+
+This Vagrant box has Docker 17.09.0-ce-rc2 installed and the following base images are already pulled from Docker Hub:
+
+  * microsoft/windowsservercore-insider
+  * microsoft/nanoserver-insider
+
+There is also some languages and runtimes available as insider images:
+
+  * microsoft/nanoserver-insider-powershell (only 16267)
+  * microsoft/nanoserver-insider-dotnet (only 16267)
+  * stefanscherer/node-windows:8.4.0-insider
+  * stefanscherer/golang-windows:1.9-insider
+
