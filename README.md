@@ -270,16 +270,17 @@ PS C:\> start http://$(docker-machine ip 2016):8080
 
 ## Further commands
 
-Here is a list of `docker-machine` commands and the equivalent Vagrant command.
+Here is a list of `docker-machine` commands and the equivalent Vagrant command. I use a `bash` function [`dm` in my dotfiles repo](https://github.com/StefanScherer/dotfiles/blob/7ce1752b3fd397797d94ff9017cbfbfd50913d78/.functions#L152-L177) to simplify all the tasks without switching to the Vagrant folder each time.
 
-| Docker-machine command | Vagrant equivalent |
-|---------|-------|
-| `docker-machine create -d xxx 2016` | `vagrant up --provider xxx 2016`
-| `docker-machine regenerate-certs 2016` | `vagrant provision 2016` |
-| `docker-machine stop 2016` | `vagrant halt 2016`
-| `docker-machine start 2016` | `vagrant up 2016`
-| `docker-machine ssh 2016` | `vagrant rdp 2016`
-| `docker-machine rm 2016` | `vagrant destroy 2016` |
+| Docker-machine command | Vagrant equivalent | dm |
+|---------|-------|------|
+| `docker-machine create -d xxx 2016` | `vagrant up --provider xxx 2016` |  |
+| `docker-machine regenerate-certs 2016` | `vagrant provision 2016` | dm regenerate-certs 2016 |
+| `docker-machine stop 2016` | `vagrant halt 2016` | dm stop 2016 |
+| `docker-machine start 2016` | `vagrant up 2016` | dm start 2016 |
+| `docker-machine ssh 2016` | `vagrant rdp 2016` | dm rdp 2016 |
+| `docker-machine rm 2016` | `vagrant destroy 2016` | dm rm 2016 |
+| `eval $(docker-machine env 2016)` |   | dm 2016 |
 
 ## Insider builds
 
