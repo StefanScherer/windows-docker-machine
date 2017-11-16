@@ -12,17 +12,17 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.synced_folder ENV['HOME'], ENV['HOME']
 
   config.vm.define "2016" do |cfg|
-    cfg.vm.box     = "StefanScherer/windows_2016_docker"
+    cfg.vm.box     = "windows_2016_docker"
     cfg.vm.provision "shell", path: "scripts/create-machine.ps1", args: "-machineHome #{ENV['HOME']} -machineName 2016"
   end
 
   config.vm.define "1709", autostart: false do |cfg|
-    cfg.vm.box     = "windows_server_1709"
+    cfg.vm.box     = "windows_server_1709_docker"
     cfg.vm.provision "shell", path: "scripts/create-machine.ps1", args: "-machineHome #{ENV['HOME']} -machineName 1709"
   end
 
   config.vm.define "insider", autostart: false do |cfg|
-    cfg.vm.box     = "windows_2016_insider"
+    cfg.vm.box     = "windows_server_insider_docker"
     cfg.vm.provision "shell", path: "scripts/create-machine.ps1", args: "-machineHome #{ENV['HOME']} -machineName insider"
   end
   
