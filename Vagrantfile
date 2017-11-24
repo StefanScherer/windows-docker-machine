@@ -9,21 +9,22 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.communicator = "winrm"
 
   config.vm.synced_folder ".", "/vagrant", disabled: true
-  config.vm.synced_folder ENV['HOME'], ENV['HOME']
+  home = ENV['HOME'].gsub('\\', '/')
+  config.vm.synced_folder home, home
 
   config.vm.define "2016" do |cfg|
     cfg.vm.box     = "windows_2016_docker"
-    cfg.vm.provision "shell", path: "scripts/create-machine.ps1", args: "-machineHome #{ENV['HOME']} -machineName 2016"
+    cfg.vm.provision "shell", path: "scripts/create-machine.ps1", args: "-machineHome #{home} -machineName 2016"
   end
 
   config.vm.define "1709", autostart: false do |cfg|
     cfg.vm.box     = "windows_server_1709_docker"
-    cfg.vm.provision "shell", path: "scripts/create-machine.ps1", args: "-machineHome #{ENV['HOME']} -machineName 1709"
+    cfg.vm.provision "shell", path: "scripts/create-machine.ps1", args: "-machineHome #{home} -machineName 1709"
   end
 
   config.vm.define "insider", autostart: false do |cfg|
     cfg.vm.box     = "windows_server_insider_docker"
-    cfg.vm.provision "shell", path: "scripts/create-machine.ps1", args: "-machineHome #{ENV['HOME']} -machineName insider"
+    cfg.vm.provision "shell", path: "scripts/create-machine.ps1", args: "-machineHome #{home} -machineName insider"
   end
   
   ["vmware_fusion", "vmware_workstation"].each do |provider|
