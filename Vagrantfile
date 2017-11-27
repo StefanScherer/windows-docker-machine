@@ -13,7 +13,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.synced_folder home, home
 
   config.vm.define "2016" do |cfg|
-    cfg.vm.box     = "windows_2016_docker"
+    cfg.vm.box     = "StefanScherer/windows_2016_docker"
     cfg.vm.provision "shell", path: "scripts/create-machine.ps1", args: "-machineHome #{home} -machineName 2016"
   end
 
