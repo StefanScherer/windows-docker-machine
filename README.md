@@ -42,26 +42,34 @@ First you need the Windows Server 2016 VM for your hypervisor. I prefer
 2. **vagrant up** to create a running VM instance of Windows Server 2016
 3. **docker run** to run Windows containers in that Windows VM
 
-Step 1 can be done with these steps:
+Step 1 (building the headless Vagrant box) can be done with these steps:
 
 ```bash
 $ git clone https://github.com/StefanScherer/packer-windows
 $ cd packer-windows
+
 $ packer build --only=vmware-iso windows_2016_docker.json
 $ vagrant box add windows_2016_docker windows_2016_docker_vmware.box
+
+- or -
+
 $ packer build --only=vmware-iso windows_server_1709_docker.json
 $ vagrant box add windows_server_1709_docker windows_server_1709_docker_vmware.box
+
+- or -
+
 $ packer build --only=vmware-iso windows_server_insider_docker.json
 $ vagrant box add windows_server_insider_docker windows_server_insider_vmware_docker.box
 ```
 
-Of course you can build only the box version you need.
+Of course you can build only the box version you need. If you are using VirtualBox instead of VMware, 
+swap `vmware` for `virtualbox` in the vagrant commands above.
 
 ## Working on macOS
 
 ### Create the Docker Machine
 
-Spin up the headless Vagrant box with Windows Server 2016 and Docker EE
+Spin up the headless Vagrant box you created earlier with Windows Server 2016 and Docker EE
 installed. It will create the TLS certs and create a `2016` Docker machine for
 your `docker-machine` binary on your Mac.
 
@@ -69,6 +77,9 @@ your `docker-machine` binary on your Mac.
 $ git clone https://github.com/StefanScherer/windows-docker-machine
 $ cd windows-docker-machine
 $ vagrant up --provider vmware_fusion 2016
+
+- or -
+
 $ vagrant up --provider virtualbox 2016
 ```
 
@@ -172,7 +183,7 @@ $ open http://$(docker-machine ip 2016):8080
 
 ## Working on Windows
 
-Spin up the headless Vagrant box with Windows Server 2016 and Docker EE
+Spin up the headless Vagrant box you created earlier with Windows Server 2016 and Docker EE
 installed. It will create the TLS certs and create a `2016` Docker machine for
 your `docker-machine` binary on your Windows host.
 
@@ -191,7 +202,13 @@ Choose your hypervisor and start the VM
 PS C:\> git clone https://github.com/StefanScherer/windows-docker-machine
 PS C:\> cd windows-docker-machine
 PS C:\> vagrant up --provider vmware_workstation 2016
+
+- or -
+
 PS C:\> vagrant up --provider virtualbox 2016
+
+- or -
+
 PS C:\> vagrant up --provider hyperv 2016
 ```
 
