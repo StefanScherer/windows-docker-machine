@@ -202,7 +202,13 @@ Choose your hypervisor and start the VM
 PS C:\> git clone https://github.com/StefanScherer/windows-docker-machine
 PS C:\> cd windows-docker-machine
 PS C:\> vagrant up --provider vmware_workstation 2016
+
+- or -
+
 PS C:\> vagrant up --provider virtualbox 2016
+
+- or -
+
 PS C:\> vagrant up --provider hyperv 2016
 ```
 
