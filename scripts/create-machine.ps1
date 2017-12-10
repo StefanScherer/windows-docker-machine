@@ -226,6 +226,24 @@ function createMachineConfig ($machineName, $machineHome, $machinePath, $machine
   copy $clientCertsPath\key.pem $machinePath\key.pem
 }
 
+function sed($file, $search, $replace) {
+  Write-Host "Replacing '$search' with '$replace' in file '$file'"
+  $content = [io.file]::ReadAllBytes($file)
+  $m = [Regex]::Match([Text.Encoding]::ASCII.GetString($content), [Regex]::Escape($search))
+  if ($m.Success) {
+    Write-Host "Found '$search' at position $($m.Index)"
+    $enc = [system.Text.Encoding]::UTF8
+    [Byte[]]$replacementString = $enc.GetBytes($replace);
+    $fileStream = [System.IO.File]::Open($file, [System.IO.FileMode]::Open, [System.IO.FileAccess]::Write, [System.IO.FileShare]::ReadWrite)
+    $binaryWriter = New-Object System.IO.BinaryWriter($fileStream)
+    $binaryWriter.BaseStream.Position = $m.Index;
+    $binaryWriter.Write($replacementString)
+    $fileStream.Close()
+  } else {
+    Write-Host "'$search' was not found"
+  }
+}
+
 $dockerData = "$env:ProgramData\docker"
 $userPath = "$env:USERPROFILE\.docker"
 
@@ -250,11 +268,15 @@ if (Test-Path "$homeDir\.docker\machine\machines\$machineName") {
 }
 Copy-Item -Recurse "$env:USERPROFILE\.docker\machine\machines\$machineName" "$homeDir\.docker\machine\machines\$machineName"
 
-Write-host Restarting Docker
-stop-service docker
+Write-Host Restarting Docker
+Stop-Service docker
 dockerd --unregister-service
 dockerd --register-service
-start-service docker
+
+Write-Host Reducing minimum API version from 1.24 to 1.15
+sed "$env:ProgramFiles\docker\dockerd.exe" "1.24" "1.15"
+
+Start-Service docker
 
 Write-Host Opening Docker TLS port
 & netsh advfirewall firewall add rule name="Docker TLS" dir=in action=allow protocol=TCP localport=2376
