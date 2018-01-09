@@ -35,6 +35,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       v.enable_vmrun_ip_lookup = false
       v.linked_clone = true
       v.vmx["vhv.enable"] = "TRUE"
+      v.ssh_info_public = true
     end
   end
 
