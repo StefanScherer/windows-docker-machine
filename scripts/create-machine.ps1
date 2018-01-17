@@ -228,19 +228,24 @@ function createMachineConfig ($machineName, $machineHome, $machinePath, $machine
 
 function sed($file, $search, $replace) {
   Write-Host "Replacing '$search' with '$replace' in file '$file'"
-  $content = [io.file]::ReadAllBytes($file)
-  $m = [Regex]::Match([Text.Encoding]::ASCII.GetString($content), [Regex]::Escape($search))
-  if ($m.Success) {
-    Write-Host "Found '$search' at position $($m.Index)"
-    $enc = [system.Text.Encoding]::UTF8
-    [Byte[]]$replacementString = $enc.GetBytes($replace);
-    $fileStream = [System.IO.File]::Open($file, [System.IO.FileMode]::Open, [System.IO.FileAccess]::Write, [System.IO.FileShare]::ReadWrite)
-    $binaryWriter = New-Object System.IO.BinaryWriter($fileStream)
-    $binaryWriter.BaseStream.Position = $m.Index;
-    $binaryWriter.Write($replacementString)
-    $fileStream.Close()
+  if (!(Test-Path "$file.bak")) {
+    Copy-Item "$file" "$file.bak"
+    $content = [io.file]::ReadAllBytes($file)
+    $m = [Regex]::Match([Text.Encoding]::ASCII.GetString($content), [Regex]::Escape($search))
+    if ($m.Success) {
+      Write-Host "Found '$search' at position $($m.Index)"
+      $enc = [system.Text.Encoding]::UTF8
+      [Byte[]]$replacementString = $enc.GetBytes($replace);
+      $fileStream = [System.IO.File]::Open($file, [System.IO.FileMode]::Open, [System.IO.FileAccess]::Write, [System.IO.FileShare]::ReadWrite)
+      $binaryWriter = New-Object System.IO.BinaryWriter($fileStream)
+      $binaryWriter.BaseStream.Position = $m.Index;
+      $binaryWriter.Write($replacementString)
+      $fileStream.Close()
+    } else {
+      Write-Host "'$search' not found."
+    }
   } else {
-    Write-Host "'$search' was not found"
+    Write-Host "Fix already applied."
   }
 }
 
