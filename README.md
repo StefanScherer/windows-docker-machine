@@ -14,6 +14,7 @@ decide which Vagrant VM should be started.
 * `2016` - Windows Server 2016 (10.0.14393) LTS channel
 * `1709` - Windows Server, version 1709 (10.0.16299) Semi annual channel
 * `insider` - Windows Server Insider builds
+* `lcow` - Windows Server, version 1709 with LCOW enabled
 
 So with a `vagrant up 2016` you spin up the LTS version, with `vagrant up 1709`
 the 1709 version and with `vagrant up insider` the Insider build.
@@ -62,7 +63,7 @@ $ packer build --only=vmware-iso windows_server_insider_docker.json
 $ vagrant box add windows_server_insider_docker windows_server_insider_vmware_docker.box
 ```
 
-Of course you can build only the box version you need. If you are using VirtualBox instead of VMware, 
+Of course you can build only the box version you need. If you are using VirtualBox instead of VMware,
 swap `vmware` for `virtualbox` in the vagrant commands above.
 
 ## Working on macOS
@@ -358,3 +359,16 @@ images are already pulled from Docker Hub:
 There is also some languages and runtimes available as insider images:
 
 * stefanscherer/node-windows
+
+## LCOW
+
+You can try the Linux Container on Windows feature in a separate machine `lcow`.
+It is preconfigured to use the Windows Server, version 1709. But you can
+also use Windows Insider Server Preview as base box.
+
+```
+dm up lcow
+dm lcow
+docker pull --platform alpine
+docker run alpine uname -a
+```
