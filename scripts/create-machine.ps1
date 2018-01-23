@@ -1,4 +1,4 @@
-param ([String] $machineHome, [String] $machineName, [String] $machineIp)
+param ([String] $machineHome, [String] $machineName, [String] $machineIp, [Switch] $enableLCOW)
 
 if (!(Test-Path $env:USERPROFILE\.docker)) {
   mkdir $env:USERPROFILE\.docker
@@ -25,6 +25,22 @@ function ensureDirs($dirs) {
     if (!(Test-Path $dir)) {
       mkdir $dir
     }
+  }
+}
+
+function installLCOW() {
+  if (!(Test-Path "$env:ProgramFiles\Linux Containers")) {
+    Write-Host "`n=== Enable LCOW"
+    Write-Host "    Downloading LCOW LinuxKit ..."
+    $ProgressPreference = 'SilentlyContinue'
+    Invoke-WebRequest -OutFile "$env:TEMP\linuxkit-lcow.zip" "https://23-111085629-gh.circle-artifacts.com/0/release.zip"
+    Expand-Archive -Path "$env:TEMP\linuxkit-lcow.zip" -DestinationPath "$env:ProgramFiles\Linux Containers" -Force
+    Remove-Item "$env:TEMP\linuxkit-lcow.zip"
+
+    Write-Host "    Downloading docker nightly ..."
+    Invoke-WebRequest -OutFile "$env:TEMP\docker-master.zip" "https://master.dockerproject.com/windows/x86_64/docker.zip"
+    Expand-Archive -Path "$env:TEMP\docker-master.zip" -DestinationPath $env:ProgramFiles -Force
+    Remove-Item "$env:TEMP\docker-master.zip"
   }
 }
 
@@ -125,18 +141,23 @@ function createCerts($rootCert, $serverCertsPath, $serverName, $ipAddresses, $cl
   copy $serverCertsPath\ca.pem $clientCertsPath\ca.pem
 }
 
-function updateConfig($daemonJson, $serverCertsPath) {
+function updateConfig($daemonJson, $serverCertsPath, $enableLCOW) {
   $config = @{}
   if (Test-Path $daemonJson) {
     $config = (Get-Content $daemonJson) -join "`n" | ConvertFrom-Json
   }
 
+  $experimental = $false
+  if ($enableLCOW) {
+    $experimental = $true
+  }
   $config = $config | Add-Member(@{ `
     hosts = @("tcp://0.0.0.0:2376", "npipe://"); `
     tlsverify = $true; `
     tlscacert = "$serverCertsPath\ca.pem"; `
     tlscert = "$serverCertsPath\server-cert.pem"; `
-    tlskey = "$serverCertsPath\server-key.pem" `
+    tlskey = "$serverCertsPath\server-key.pem"; `
+    experimental = $experimental `
     }) -Force -PassThru
 
   Write-Host "`n=== Creating / Updating $daemonJson"
@@ -259,7 +280,7 @@ $clientCertsPath = "$userPath"
 $rootCert = createCA "$dockerData\certs.d"
 
 createCerts $rootCert $serverCertsPath $serverName $ipAddresses $clientCertsPath
-updateConfig "$dockerData\config\daemon.json" $serverCertsPath
+updateConfig "$dockerData\config\daemon.json" $serverCertsPath $enableLCOW
 
 if ($machineName) {
   $machinePath = "$env:USERPROFILE\.docker\machine\machines\$machineName"
@@ -273,15 +294,17 @@ if (Test-Path "$homeDir\.docker\machine\machines\$machineName") {
 }
 Copy-Item -Recurse "$env:USERPROFILE\.docker\machine\machines\$machineName" "$homeDir\.docker\machine\machines\$machineName"
 
-Write-Host Restarting Docker
+Write-Host "Restarting Docker"
 Stop-Service docker
 dockerd --unregister-service
-dockerd --register-service
-
-Write-Host Reducing minimum API version from 1.24 to 1.15
+if ($enableLCOW) {
+  installLCOW  
+}
+dockerd --register-service  
+Write-Host "Reducing minimum API version from 1.24 to 1.15"
 sed "$env:ProgramFiles\docker\dockerd.exe" "1.24" "1.15"
 
 Start-Service docker
 
-Write-Host Opening Docker TLS port
+Write-Host "Opening Docker TLS port"
 & netsh advfirewall firewall add rule name="Docker TLS" dir=in action=allow protocol=TCP localport=2376
