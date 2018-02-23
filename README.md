@@ -19,6 +19,9 @@ decide which Vagrant VM should be started.
 So with a `vagrant up 2016` you spin up the LTS version, with `vagrant up 1709`
 the 1709 version and with `vagrant up insider` the Insider build.
 
+If you don't want to run the **packer** step, you can run `vagrant up 2016-box`
+and get your box downloaded directly from [Vagrant Cloud](https://app.vagrantup.com/StefanScherer/boxes/windows_2016_docker).
+
 Tested environments
 
 * macOS with Vagrant 2.0.1
