@@ -19,7 +19,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.define "2016-box" do |cfg|
     cfg.vm.box     = "StefanScherer/windows_2016_docker"
-    cfg.vm.provision "shell", path: "scripts/create-machine.ps1", args: "-machineHome #{home} -machineName 2016"
+    cfg.vm.provision "shell", path: "scripts/create-machine.ps1", args: "-machineHome #{home} -machineName 2016-box"
   end
 
   config.vm.define "1709", autostart: false do |cfg|
