@@ -370,8 +370,8 @@ It is preconfigured to use the Windows Server, version 1709. But you can
 also use Windows Insider Server Preview as base box.
 
 ```
-dm up lcow
-dm lcow
-docker pull --platform alpine
+vagrant up lcow
+eval $(docker-machine env lcow)
+docker pull --platform linux alpine
 docker run alpine uname -a
 ```
