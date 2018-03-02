@@ -29,19 +29,21 @@ function ensureDirs($dirs) {
 }
 
 function installLCOW() {
-  if (!(Test-Path "$env:ProgramFiles\Linux Containers")) {
-    Write-Host "`n=== Enable LCOW"
-    Write-Host "    Downloading LCOW LinuxKit ..."
-    $ProgressPreference = 'SilentlyContinue'
-    Invoke-WebRequest -OutFile "$env:TEMP\linuxkit-lcow.zip" "https://23-111085629-gh.circle-artifacts.com/0/release.zip"
-    Expand-Archive -Path "$env:TEMP\linuxkit-lcow.zip" -DestinationPath "$env:ProgramFiles\Linux Containers" -Force
-    Remove-Item "$env:TEMP\linuxkit-lcow.zip"
-
-    Write-Host "    Downloading docker nightly ..."
-    Invoke-WebRequest -OutFile "$env:TEMP\docker-master.zip" "https://master.dockerproject.com/windows/x86_64/docker.zip"
-    Expand-Archive -Path "$env:TEMP\docker-master.zip" -DestinationPath $env:ProgramFiles -Force
-    Remove-Item "$env:TEMP\docker-master.zip"
+  if (Test-Path "$env:ProgramFiles\Linux Containers") {
+    Remove-Item -Recurse "$env:ProgramFiles\Linux Containers"
   }
+  Write-Host "`n=== Enable LCOW"
+  Write-Host "    Downloading LCOW LinuxKit ..."
+  $ProgressPreference = 'SilentlyContinue'
+  [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+  Invoke-WebRequest -OutFile "$env:TEMP\linuxkit-lcow.zip" "https://github.com/linuxkit/lcow/releases/download/v4.14.23-v0.3.6/release.zip"
+  Expand-Archive -Path "$env:TEMP\linuxkit-lcow.zip" -DestinationPath "$env:ProgramFiles\Linux Containers" -Force
+  Remove-Item "$env:TEMP\linuxkit-lcow.zip"
+
+  Write-Host "    Downloading docker nightly ..."
+  Invoke-WebRequest -OutFile "$env:TEMP\docker-master.zip" "https://master.dockerproject.com/windows/x86_64/docker.zip"
+  Expand-Archive -Path "$env:TEMP\docker-master.zip" -DestinationPath $env:ProgramFiles -Force
+  Remove-Item "$env:TEMP\docker-master.zip"
 }
 
 # https://docs.docker.com/engine/security/https/
