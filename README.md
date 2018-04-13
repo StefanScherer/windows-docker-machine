@@ -6,7 +6,7 @@ containers and the Windows containers.
 
 ![docker on mac](images/docker-on-mac.gif)
 
-## Three flavors
+## Many flavors
 
 There are three flavors or versions of Windows Server 2016. This is where you
 decide which Vagrant VM should be started.
