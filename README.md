@@ -58,17 +58,17 @@ $ vagrant box add windows_2016_docker windows_2016_docker_vmware.box
 
 - or -
 
-$ packer build --only=vmware-iso windows_server_1709_docker.json
+$ packer build --only=vmware-iso --var iso_url=~/path-to-1709.iso windows_server_1709_docker.json
 $ vagrant box add windows_server_1709_docker windows_server_1709_docker_vmware.box
 
 - or -
 
-$ packer build --only=vmware-iso windows_server_insider_docker.json
+$ packer build --only=vmware-iso --var iso_url=~/path-to-insider.iso windows_server_insider_docker.json
 $ vagrant box add windows_server_insider_docker windows_server_insider_vmware_docker.box
 
 - or -
 
-$ packer build --only=vmware-iso windows_2019_docker.json
+$ packer build --only=vmware-iso --var iso_url=~/path-to-2019.iso windows_2019_docker.json
 $ vagrant box add windows_2019_docker windows_2019_docker_vmware.box
 ```
 
