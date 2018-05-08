@@ -14,6 +14,7 @@ decide which Vagrant VM should be started.
 * `2016` - Windows Server 2016 (10.0.14393) LTS channel
 * `2019` - Windows Server 2019 (10.0.17639) LTS channel (insider preview)
 * `1709` - Windows Server, version 1709 (10.0.16299) Semi annual channel
+* `1803` - Windows Server, version 1803 (10.0.16299) Semi annual channel
 * `insider` - Windows Server Insider builds
 * `lcow` - Windows Server, version 1709 with LCOW enabled
 
@@ -60,6 +61,11 @@ $ vagrant box add windows_2016_docker windows_2016_docker_vmware.box
 
 $ packer build --only=vmware-iso --var iso_url=~/path-to-1709.iso windows_server_1709_docker.json
 $ vagrant box add windows_server_1709_docker windows_server_1709_docker_vmware.box
+
+- or -
+
+$ packer build --only=vmware-iso --var iso_url=~/path-to-1803.iso windows_server_1803_docker.json
+$ vagrant box add windows_server_1803_docker windows_server_1803_docker_vmware.box
 
 - or -
 
