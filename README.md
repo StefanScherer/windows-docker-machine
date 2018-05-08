@@ -14,7 +14,7 @@ decide which Vagrant VM should be started.
 * `2016` - Windows Server 2016 (10.0.14393) LTS channel
 * `2019` - Windows Server 2019 (10.0.17639) LTS channel (insider preview)
 * `1709` - Windows Server, version 1709 (10.0.16299) Semi annual channel
-* `1803` - Windows Server, version 1803 (10.0.16299) Semi annual channel
+* `1803` - Windows Server, version 1803 (10.0.17134) Semi annual channel
 * `insider` - Windows Server Insider builds
 * `lcow` - Windows Server, version 1709 with LCOW enabled
 
