@@ -1,4 +1,4 @@
-param ([String] $machineHome, [String] $machineName, [String] $machineIp, [Switch] $enableLCOW)
+param ([String] $machineHome, [String] $machineName, [String] $machineIp, [Switch] $enableLCOW, [Switch] $experimental)
 
 if (!(Test-Path $env:USERPROFILE\.docker)) {
   mkdir $env:USERPROFILE\.docker
@@ -143,13 +143,12 @@ function createCerts($rootCert, $serverCertsPath, $serverName, $ipAddresses, $cl
   copy $serverCertsPath\ca.pem $clientCertsPath\ca.pem
 }
 
-function updateConfig($daemonJson, $serverCertsPath, $enableLCOW) {
+function updateConfig($daemonJson, $serverCertsPath, $enableLCOW, $experimental) {
   $config = @{}
   if (Test-Path $daemonJson) {
     $config = (Get-Content $daemonJson) -join "`n" | ConvertFrom-Json
   }
 
-  $experimental = $false
   if ($enableLCOW) {
     $experimental = $true
   }
@@ -282,7 +281,7 @@ $clientCertsPath = "$userPath"
 $rootCert = createCA "$dockerData\certs.d"
 
 createCerts $rootCert $serverCertsPath $serverName $ipAddresses $clientCertsPath
-updateConfig "$dockerData\config\daemon.json" $serverCertsPath $enableLCOW
+updateConfig "$dockerData\config\daemon.json" $serverCertsPath $enableLCOW $experimental
 
 if ($machineName) {
   $machinePath = "$env:USERPROFILE\.docker\machine\machines\$machineName"
