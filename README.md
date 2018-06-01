@@ -17,6 +17,7 @@ decide which Vagrant VM should be started.
 * `1803` - Windows Server, version 1803 (10.0.17134) Semi annual channel
 * `insider` - Windows Server Insider builds
 * `lcow` - Windows Server, version 1709 with LCOW enabled
+* `lcow-1803` - Windows Server, version 1803 with LCOW enabled
 
 So with a `vagrant up 2016` you spin up the LTS version, with `vagrant up 1709`
 the 1709 version and with `vagrant up insider` the Insider build.
