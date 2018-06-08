@@ -1,5 +1,7 @@
 param ([String] $machineHome, [String] $machineName, [String] $machineIp, [Switch] $enableLCOW, [Switch] $experimental)
 
+$ErrorActionPreference = 'Stop';
+
 if (!(Test-Path $env:USERPROFILE\.docker)) {
   mkdir $env:USERPROFILE\.docker
 }
