@@ -4,6 +4,8 @@ image: Visual Studio 2017
 #install:
 #  - choco install -y vagrant
 
+build: off
+
 test_script:
 #  - vagrant validate
   - ps: .\scripts\create-machine.ps1 -machineHome C:/Users/foo -machineName 2016
