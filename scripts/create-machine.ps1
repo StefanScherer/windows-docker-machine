@@ -151,6 +151,9 @@ function updateConfig($daemonJson, $serverCertsPath, $enableLCOW, $experimental)
     $config = (Get-Content $daemonJson) -join "`n" | ConvertFrom-Json
   }
 
+  if (!$experimental) {
+    $experimental = $false
+  }
   if ($enableLCOW) {
     $experimental = $true
   }
