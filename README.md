@@ -1,4 +1,5 @@
 # Windows Docker Machine
+[![Build status](https://ci.appveyor.com/api/projects/status/f1i6eotfeghj22u3?svg=true)](https://ci.appveyor.com/project/StefanScherer/windows-docker-machine)
 
 This Vagrant environment creates a Docker Machine to work on your MacBook with
 Windows containers. You can easily switch between Docker for Mac Linux
