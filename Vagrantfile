@@ -1,11 +1,9 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-VAGRANTFILE_API_VERSION = "2"
-
 Vagrant.require_version ">= 1.8.4"
 
-Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+Vagrant.configure("2") do |config|
   config.vm.communicator = "winrm"
 
   config.vm.synced_folder ".", "/vagrant", disabled: true
