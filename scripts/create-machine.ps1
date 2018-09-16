@@ -15,6 +15,8 @@ if (!$machineIp) {
       -And $_.IPAddress -Ne "127.0.0.1" `
       -And $_.IPAddress -Ne "10.0.2.15" `
     }).IPAddress
+} else {
+  $ipAddresses = "$ipAddresses,$machineIp"
 }
 
 $homeDir = $machineHome
@@ -38,8 +40,11 @@ function installLCOW() {
   Write-Host "    Downloading LCOW LinuxKit ..."
   $ProgressPreference = 'SilentlyContinue'
   [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-  Invoke-WebRequest -OutFile "$env:TEMP\linuxkit-lcow.zip" "https://github.com/linuxkit/lcow/releases/download/v4.14.23-v0.3.6/release.zip"
+  Invoke-WebRequest -OutFile "$env:TEMP\linuxkit-lcow.zip" "https://github.com/linuxkit/lcow/releases/download/4.14.29-0aea33bc/release.zip"
   Expand-Archive -Path "$env:TEMP\linuxkit-lcow.zip" -DestinationPath "$env:ProgramFiles\Linux Containers" -Force
+  if (Test-Path "$env:ProgramFiles\Linux Containers\bootx64.efi") {
+    Move-Item "$env:ProgramFiles\Linux Containers\bootx64.efi" "$env:ProgramFiles\Linux Containers\kernel" -Force
+  }
   Remove-Item "$env:TEMP\linuxkit-lcow.zip"
 
   Write-Host "    Downloading docker nightly ..."
