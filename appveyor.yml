@@ -1,7 +1,9 @@
 version: 1.0.{build}
 image: Visual Studio 2017
 
-#install:
+install:
+  - mkdir "C:\Program Files\docker"
+  - curl.exe -Lo "C:\Program Files\docker\dockerd.exe" https://master.dockerproject.com/windows/x86_64/dockerd.exe
 #  - choco install -y vagrant
 
 build: off
