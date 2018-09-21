@@ -13,6 +13,7 @@ install:
 #  - mkdir "C:\Program Files\docker"
   - curl.exe -Lo "C:\Program Files\docker\dockerd.exe" https://master.dockerproject.com/windows/x86_64/dockerd.exe
   - set PATH=c:\program files\docker;%PATH%
+  - sc stop com.docker.service
 #  - choco install -y vagrant
 
 build: off
