@@ -1,6 +1,13 @@
 version: 1.0.{build}
 image: Visual Studio 2017
 
+# Uncomment to debug via RDP
+init:
+  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+
+on_finish:
+  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+
 install:
   - dir "C:\Program Files\docker"
 #  - mkdir "C:\Program Files\docker"
