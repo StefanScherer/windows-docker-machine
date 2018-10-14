@@ -35,6 +35,11 @@ Vagrant.configure("2") do |config|
     cfg.vm.provision "shell", path: "scripts/create-machine.ps1", args: "-machineHome #{home} -machineName 2019"
   end
 
+  config.vm.define "2019-box", autostart: false do |cfg|
+    cfg.vm.box     = "StefanScherer/windows_2019_docker"
+    cfg.vm.provision "shell", path: "scripts/create-machine.ps1", args: "-machineHome #{home} -machineName 2019-box"
+  end
+
   config.vm.define "insider", autostart: false do |cfg|
     cfg.vm.box     = "windows_server_insider_docker"
     cfg.vm.provision "shell", path: "scripts/create-machine.ps1", args: "-machineHome #{home} -machineName insider"
