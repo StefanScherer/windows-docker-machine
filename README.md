@@ -9,30 +9,30 @@ containers and the Windows containers.
 
 ## Many flavors
 
-There are three flavors or versions of Windows Server 2016. This is where you
+There are several versions of Windows Server. This is where you
 decide which Vagrant VM should be started.
 
-* `2016` - Windows Server 2016 (10.0.14393) LTS channel
 * `2019` - Windows Server 2019 (10.0.17763) LTS channel
-* `1709` - Windows Server, version 1709 (10.0.16299) Semi annual channel
 * `1803` - Windows Server, version 1803 (10.0.17134) Semi annual channel
+* `1709` - Windows Server, version 1709 (10.0.16299) Semi annual channel
+* `2016` - Windows Server 2016 (10.0.14393) LTS channel
 * `insider` - Windows Server Insider builds
 * `lcow` - Windows Server, version 1709 with LCOW enabled
 * `lcow-1803` - Windows Server, version 1803 with LCOW enabled
 
-So with a `vagrant up 2016` you spin up the LTS version, with `vagrant up 1709`
-the 1709 version and with `vagrant up insider` the Insider build.
+So with a `vagrant up 2019` you spin up the LTS version, with `vagrant up 1803`
+the 1803 semi-annual version and with `vagrant up insider` the Insider build.
 
 If you don't want to run the **packer** step, you can run `vagrant up 2019-box`
 and get your box downloaded directly from [Vagrant Cloud](https://app.vagrantup.com/StefanScherer/boxes/windows_2019_docker).
 
 Tested environments
 
-* macOS with Vagrant 2.0.3
-  * VMware Fusion Pro 10.1.0
-  * VirtualBox 5.2.8
-* Windows with Vagrant 2.0.3
-  * VMware Workstation Pro 14.1.0
+* macOS with Vagrant 2.2.0
+  * VMware Fusion Pro 11.0.1
+  * VirtualBox 5.2.20
+* Windows with Vagrant 2.2.0
+  * VMware Workstation Pro 14.1.3
   * (VirtualBox see issue
     [#2](https://github.com/StefanScherer/windows-docker-machine/issues/2))
   * (Hyper-V see issue
@@ -40,14 +40,14 @@ Tested environments
 
 #### Before you begin
 
-First you need the Windows Server 2016 VM for your hypervisor. I prefer
+First you need the Windows Server 2019 VM for your hypervisor. I prefer
 "Infrastructure as Code", so every build step is available on GitHub.
 
 ![packer vagrant docker](images/packer_vagrant_docker.png)
 
 1. **packer build** to build a Vagrant base box, it's like a Docker image, but
    for Vagrant VM's
-2. **vagrant up** to create a running VM instance of Windows Server 2016
+2. **vagrant up** to create a running VM instance of Windows Server
 3. **docker run** to run Windows containers in that Windows VM
 
 Step 1 (building the headless Vagrant box) can be done with these steps:
@@ -56,8 +56,8 @@ Step 1 (building the headless Vagrant box) can be done with these steps:
 $ git clone https://github.com/StefanScherer/packer-windows
 $ cd packer-windows
 
-$ packer build --only=vmware-iso windows_2016_docker.json
-$ vagrant box add windows_2016_docker windows_2016_docker_vmware.box
+$ packer build --only=vmware-iso windows_2019_docker.json
+$ vagrant box add windows_2019_docker windows_2019_docker_vmware.box
 
 - or -
 
@@ -76,8 +76,8 @@ $ vagrant box add windows_server_insider_docker windows_server_insider_vmware_do
 
 - or -
 
-$ packer build --only=vmware-iso --var iso_url=~/path-to-2019.iso windows_2019_docker.json
-$ vagrant box add windows_2019_docker windows_2019_docker_vmware.box
+$ packer build --only=vmware-iso --var iso_url=~/path-to-2016.iso windows_2016_docker.json
+$ vagrant box add windows_2016_docker windows_2016_docker_vmware.box
 ```
 
 Of course you can build only the box version you need. If you are using VirtualBox instead of VMware,
@@ -87,18 +87,18 @@ swap `vmware` for `virtualbox` in the vagrant commands above.
 
 ### Create the Docker Machine
 
-Spin up the headless Vagrant box you created earlier with Windows Server 2016 and Docker EE
-installed. It will create the TLS certs and create a `2016` Docker machine for
+Spin up the headless Vagrant box you created earlier with Windows Server 2019 and Docker EE
+installed. It will create the TLS certs and create a `2019` Docker machine for
 your `docker-machine` binary on your Mac.
 
 ```bash
 $ git clone https://github.com/StefanScherer/windows-docker-machine
 $ cd windows-docker-machine
-$ vagrant up --provider vmware_fusion 2016
+$ vagrant up --provider vmware_fusion 2019
 
 - or -
 
-$ vagrant up --provider virtualbox 2016
+$ vagrant up --provider virtualbox 2019
 ```
 
 ### List your new Docker machine
@@ -108,8 +108,8 @@ $ docker-machine ls
 NAME      ACTIVE   DRIVER         STATE     URL                          SWARM   DOCKER    ERRORS
 dev       -        virtualbox     Running   tcp://192.168.99.100:2376            v1.13.0
 linux     -        vmwarefusion   Running                                        Unknown
-2016      *        generic        Running   tcp://192.168.254.135:2376           Unknown
-1709      -        generic        Running   tcp://192.168.254.136:2376           Unknown
+2019      *        generic        Running   tcp://192.168.254.135:2376           Unknown
+1803      -        generic        Running   tcp://192.168.254.136:2376           Unknown
 insider   -        generic        Running   tcp://192.168.254.137:2376           Unknown
 ```
 
@@ -120,7 +120,7 @@ environments works as shown below.
 ### Switch to Windows containers
 
 ```bash
-$ eval $(docker-machine env 2016)
+$ eval $(docker-machine env 2019)
 ```
 
 Now your Mac Docker client talks to the Windows Docker engine:
@@ -182,7 +182,7 @@ Just use `C:$(pwd)` to prepend a drive letter.
 $ docker run -it -v C:$(pwd):C:$(pwd) microsoft/windowsservercore powershell
 ```
 
-Yes, this mounts the current directory through the Windows 2016 VM into the
+Yes, this mounts the current directory through the Windows 2019 VM into the
 Windows Container.
 
 ### Accessing published ports of Windows containers
@@ -196,13 +196,13 @@ browser.
 
 ```
 $ docker run -d -p 8080:8080 stefanscherer/whoami
-$ open http://$(docker-machine ip 2016):8080
+$ open http://$(docker-machine ip 2019):8080
 ```
 
 ## Working on Windows
 
-Spin up the headless Vagrant box you created earlier with Windows Server 2016 and Docker EE
-installed. It will create the TLS certs and create a `2016` Docker machine for
+Spin up the headless Vagrant box you created earlier with Windows Server 2019 and Docker EE
+installed. It will create the TLS certs and create a `2019` Docker machine for
 your `docker-machine` binary on your Windows host.
 
 If you haven't worked with `docker-machine` yet, create the `.docker` directory
@@ -219,18 +219,18 @@ Choose your hypervisor and start the VM
 ```powershell
 PS C:\> git clone https://github.com/StefanScherer/windows-docker-machine
 PS C:\> cd windows-docker-machine
-PS C:\> vagrant up --provider vmware_workstation 2016
+PS C:\> vagrant up --provider vmware_workstation 2019
 
 - or -
 
-PS C:\> vagrant up --provider virtualbox 2016
+PS C:\> vagrant up --provider virtualbox 2019
 
 - or -
 
-PS C:\> vagrant up --provider hyperv 2016
+PS C:\> vagrant up --provider hyperv 2019
 ```
 
-Notice: The provider `hyperv` does mount the volumes with SMB into the Win2016
+Notice: The provider `hyperv` does mount the volumes with SMB into the Windows Server 2019
 VM. It seems that there is a problem mounting that further into a Windows
 container. The provisioning (creating the TLS certs and copying them back to the
 Windows host) will fail.
@@ -241,7 +241,7 @@ Windows host) will fail.
 PS C:\> docker-machine ls
 NAME      ACTIVE   DRIVER         STATE     URL                          SWARM   DOCKER    ERRORS
 dev       -        virtualbox     Running   tcp://192.168.99.100:2376            v1.13.0
-2016      *        generic        Running   tcp://192.168.254.135:2376           Unknown
+2019      *        generic        Running   tcp://192.168.254.135:2376           Unknown
 ```
 
 ### Switch to Windows containers
@@ -309,7 +309,7 @@ Just use `$(pwd)` in PowerShell.
 PS C:\> docker run -it -v "$(pwd):$(pwd)" microsoft/windowsservercore powershell
 ```
 
-Yes, this mounts the current directory through the Windows 2016 VM into the
+Yes, this mounts the current directory through the Windows 2019 VM into the
 Windows Container.
 
 ### Accessing published ports of Windows containers
@@ -322,7 +322,7 @@ Example: Run the whoami Windows container and open it in the default browser.
 
 ```powershell
 PS C:\> docker run -d -p 8080:8080 stefanscherer/whoami
-PS C:\> start http://$(docker-machine ip 2016):8080
+PS C:\> start http://$(docker-machine ip 2019):8080
 ```
 
 ## Further commands
@@ -334,13 +334,13 @@ to simplify all the tasks without switching to the Vagrant folder each time.
 
 | Docker-machine command                 | Vagrant equivalent               | dm                         |
 | -------------------------------------- | -------------------------------- | -------------------------- |
-| `docker-machine create -d xxx 2016`    | `vagrant up --provider xxx 2016` | `dm start 2016`            |
-| `docker-machine regenerate-certs 2016` | `vagrant provision 2016`         | `dm regenerate-certs 2016` |
-| `docker-machine stop 2016`             | `vagrant halt 2016`              | `dm stop 2016`             |
-| `docker-machine start 2016`            | `vagrant up 2016`                | `dm start 2016`            |
-| `docker-machine ssh 2016`              | `vagrant rdp 2016`               | `dm rdp 2016`              |
-| `docker-machine rm 2016`               | `vagrant destroy 2016`           | `dm rm 2016`               |
-| `eval $(docker-machine env 2016)`      |                                  | `dm 2016`                  |
+| `docker-machine create -d xxx 2019`    | `vagrant up --provider xxx 2019` | `dm start 2019`            |
+| `docker-machine regenerate-certs 2019` | `vagrant provision 2019`         | `dm regenerate-certs 2019` |
+| `docker-machine stop 2019`             | `vagrant halt 2019`              | `dm stop 2019`             |
+| `docker-machine start 2019`            | `vagrant up 2019`                | `dm start 2019`            |
+| `docker-machine ssh 2019`              | `vagrant rdp 2019`               | `dm rdp 2019`              |
+| `docker-machine rm 2019`               | `vagrant destroy 2019`           | `dm rm 2019`               |
+| `eval $(docker-machine env 2019)`      |                                  | `dm 2019`                  |
 
 ## Insider builds
 
