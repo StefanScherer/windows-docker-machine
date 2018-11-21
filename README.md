@@ -372,7 +372,7 @@ Then spin up your Insider machine with
 vagrant up insider
 ```
 
-This Vagrant box has Docker 17.10.0-ee-preview3 installed and the following base
+This Vagrant box has Docker 18.09.0 installed and the following base
 images are already pulled from Docker Hub:
 
 * microsoft/windowsservercore-insider
@@ -385,7 +385,7 @@ There is also some languages and runtimes available as insider images:
 ## LCOW
 
 You can try the Linux Container on Windows feature in a separate machine `lcow`.
-It is preconfigured to use the Windows Server, version 1709. But you can
+It is preconfigured to use the Windows Server, version 1809. But you can
 also use Windows Insider Server Preview as base box.
 
 ```
