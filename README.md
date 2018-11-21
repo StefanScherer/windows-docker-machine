@@ -12,16 +12,17 @@ containers and the Windows containers.
 There are several versions of Windows Server. This is where you
 decide which Vagrant VM should be started.
 
-* `2019` - Windows Server 2019 (10.0.17763) LTS channel
-* `1803` - Windows Server, version 1803 (10.0.17134) Semi annual channel
-* `1709` - Windows Server, version 1709 (10.0.16299) Semi annual channel
+* `2019` - Windows Server 2019 (10.0.17763) LTS Channel
+* `1809` - Windows Server, version 1809 (10.0.17763) Semi-Annual Channel
+* `1803` - Windows Server, version 1803 (10.0.17134) Semi-Annual Channel
+* `1709` - Windows Server, version 1709 (10.0.16299) Semi-Annual Channel
 * `2016` - Windows Server 2016 (10.0.14393) LTS channel
 * `insider` - Windows Server Insider builds
 * `lcow` - Windows Server, version 1709 with LCOW enabled
 * `lcow-1803` - Windows Server, version 1803 with LCOW enabled
 
-So with a `vagrant up 2019` you spin up the LTS version, with `vagrant up 1803`
-the 1803 semi-annual version and with `vagrant up insider` the Insider build.
+So with a `vagrant up 2019` you spin up the LTS version, with `vagrant up 1809`
+the 1809 semi-annual version and with `vagrant up insider` the Insider build.
 
 If you don't want to run the **packer** step, you can run `vagrant up 2019-box`
 and get your box downloaded directly from [Vagrant Cloud](https://app.vagrantup.com/StefanScherer/boxes/windows_2019_docker).
