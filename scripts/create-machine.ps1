@@ -40,17 +40,17 @@ function installLCOW() {
   Write-Host "    Downloading LCOW LinuxKit ..."
   $ProgressPreference = 'SilentlyContinue'
   [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-  Invoke-WebRequest -OutFile "$env:TEMP\linuxkit-lcow.zip" "https://github.com/linuxkit/lcow/releases/download/4.14.29-0aea33bc/release.zip"
+  Invoke-WebRequest -OutFile "$env:TEMP\linuxkit-lcow.zip" "https://github.com/linuxkit/lcow/releases/download/v4.14.35-v0.3.9/release.zip"
   Expand-Archive -Path "$env:TEMP\linuxkit-lcow.zip" -DestinationPath "$env:ProgramFiles\Linux Containers" -Force
-  if (Test-Path "$env:ProgramFiles\Linux Containers\bootx64.efi") {
-    Move-Item "$env:ProgramFiles\Linux Containers\bootx64.efi" "$env:ProgramFiles\Linux Containers\kernel" -Force
-  }
+  # if (Test-Path "$env:ProgramFiles\Linux Containers\bootx64.efi") {
+  #   Move-Item "$env:ProgramFiles\Linux Containers\bootx64.efi" "$env:ProgramFiles\Linux Containers\kernel" -Force
+  # }
   Remove-Item "$env:TEMP\linuxkit-lcow.zip"
 
-  Write-Host "    Downloading docker nightly ..."
-  Invoke-WebRequest -OutFile "$env:TEMP\docker-master.zip" "https://master.dockerproject.com/windows/x86_64/docker.zip"
-  Expand-Archive -Path "$env:TEMP\docker-master.zip" -DestinationPath $env:ProgramFiles -Force
-  Remove-Item "$env:TEMP\docker-master.zip"
+  # Write-Host "    Downloading docker nightly ..."
+  # Invoke-WebRequest -OutFile "$env:TEMP\docker-master.zip" "https://master.dockerproject.com/windows/x86_64/docker.zip"
+  # Expand-Archive -Path "$env:TEMP\docker-master.zip" -DestinationPath $env:ProgramFiles -Force
+  # Remove-Item "$env:TEMP\docker-master.zip"
 }
 
 # https://docs.docker.com/engine/security/https/
