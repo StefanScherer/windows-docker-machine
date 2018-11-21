@@ -18,8 +18,7 @@ decide which Vagrant VM should be started.
 * `1709` - Windows Server, version 1709 (10.0.16299) Semi-Annual Channel
 * `2016` - Windows Server 2016 (10.0.14393) LTS channel
 * `insider` - Windows Server Insider builds
-* `lcow` - Windows Server, version 1709 with LCOW enabled
-* `lcow-1803` - Windows Server, version 1803 with LCOW enabled
+* `lcow` - Windows Server, version 1809 with LCOW enabled
 
 So with a `vagrant up 2019` you spin up the LTS version, with `vagrant up 1809`
 the 1809 semi-annual version and with `vagrant up insider` the Insider build.
@@ -62,13 +61,18 @@ $ vagrant box add windows_2019_docker windows_2019_docker_vmware.box
 
 - or -
 
-$ packer build --only=vmware-iso --var iso_url=~/path-to-1709.iso windows_server_1709_docker.json
-$ vagrant box add windows_server_1709_docker windows_server_1709_docker_vmware.box
+$ packer build --only=vmware-iso --var iso_url=~/path-to-1809.iso windows_server_1809_docker.json
+$ vagrant box add windows_server_1809_docker windows_server_1809_docker_vmware.box
 
 - or -
 
 $ packer build --only=vmware-iso --var iso_url=~/path-to-1803.iso windows_server_1803_docker.json
 $ vagrant box add windows_server_1803_docker windows_server_1803_docker_vmware.box
+
+- or -
+
+$ packer build --only=vmware-iso --var iso_url=~/path-to-1709.iso windows_server_1709_docker.json
+$ vagrant box add windows_server_1709_docker windows_server_1709_docker_vmware.box
 
 - or -
 
@@ -387,6 +391,5 @@ also use Windows Insider Server Preview as base box.
 ```
 vagrant up lcow
 eval $(docker-machine env lcow)
-docker pull --platform linux alpine
 docker run alpine uname -a
 ```
