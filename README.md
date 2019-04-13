@@ -332,7 +332,7 @@ The `dm` started as a shortcut for `docker-machine` commands. I have updated the
 |                                        | `vagrant rdp 2019`               | `dm rdp 2019`              |
 |                                        | `vagrant destroy [-f] 2019`      | `dm rm [-f] 2019`               |
 | `docker context use 2019`              |                                  | `dm 2019`                  |
-| `docker context inspect 2019 | jq -r '.[0].Endpoints.docker.Host | .[6:] | .[:-5]'` |  | `dm ip 2019`   |
+| <code>docker context inspect 2019 &#124; jq -r '.[0].Endpoints.docker.Host &#124; .[6:] &#124; .[:-5]'</code> |  | `dm ip 2019`   |
 
 
 ## Insider builds
