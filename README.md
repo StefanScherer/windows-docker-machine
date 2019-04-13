@@ -177,7 +177,7 @@ Server: Docker Engine - Community
 Just use `C:$(pwd)` to prepend a drive letter.
 
 ```bash
-$ docker run -it -v C:$(pwd):C:$(pwd) microsoft/windowsservercore powershell
+$ docker run -it -v C:$(pwd):C:$(pwd) mcr.microsoft.com/windows/servercore:1809 powershell
 ```
 
 Yes, this mounts the current directory through the Windows 2019 VM into the
@@ -307,7 +307,7 @@ Server: Docker Engine - Community
 Just use `$(pwd)` in PowerShell.
 
 ```powershell
-PS C:\> docker run -it -v "$(pwd):$(pwd)" microsoft/windowsservercore powershell
+PS C:\> docker run -it -v "$(pwd):$(pwd)" mcr.microsoft.com/windows/servercore:1809 powershell
 ```
 
 Yes, this mounts the current directory through the Windows 2019 VM into the
