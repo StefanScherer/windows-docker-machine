@@ -330,7 +330,7 @@ PS C:\> start http://$(docker-machine ip 2019-box):8080
 
 Here is a list of `vagrant` and `docker` commands for typical actions.
 I use a `bash` function
-[`dm` in my dotfiles repo](https://github.com/StefanScherer/dotfiles/blob/7ce1752b3fd397797d94ff9017cbfbfd50913d78/.functions#L152-L177)
+[`dm` in my dotfiles repo](https://github.com/StefanScherer/dotfiles/blob/2e771b023d97d9ec91fb20633204903c9f3b21eb/.functions#L140-L183)
 to simplify all the tasks without switching to the Vagrant folder each time.
 The `dm` started as a shortcut for `docker-machine` commands. I have updated the function to work with `docker context`, but kept the good parts.
 
