@@ -175,110 +175,31 @@ function updateConfig($daemonJson, $serverCertsPath, $enableLCOW, $experimental)
   $config | ConvertTo-Json | Set-Content $daemonJson -Encoding Ascii
 }
 
-function createMachineConfig ($machineName, $machineHome, $machinePath, $machineIp, $serverCertsPath, $clientCertsPath) {
-  $machineConfigJson = "$machinePath\config.json"
+function createContext ($machineName, $machineHome, $contextMetaPath, $contextCertPath, $machineIp, $serverCertsPath, $clientCertsPath) {
+  $contextMetaJson = "$contextMetaPath\meta.json"
 
   $config = @"
 {
-    "ConfigVersion": 3,
-    "Driver": {
-        "IPAddress": "$machineIp",
-        "MachineName": "$machineName",
-        "SSHUser": "none",
-        "SSHPort": 3389,
-        "SSHKeyPath": "",
-        "StorePath": "$machineHome/.docker/machine",
-        "SwarmMaster": false,
-        "SwarmHost": "",
-        "SwarmDiscovery": "",
-        "EnginePort": 2376,
-        "SSHKey": ""
-    },
-    "DriverName": "generic",
-    "HostOptions": {
-        "Driver": "",
-        "Memory": 0,
-        "Disk": 0,
-        "EngineOptions": {
-            "ArbitraryFlags": [],
-            "Dns": null,
-            "GraphDir": "",
-            "Env": [],
-            "Ipv6": false,
-            "InsecureRegistry": [],
-            "Labels": [],
-            "LogLevel": "",
-            "StorageDriver": "",
-            "SelinuxEnabled": false,
-            "TlsVerify": true,
-            "RegistryMirror": [],
-            "InstallURL": "https://get.docker.com"
-        },
-        "SwarmOptions": {
-            "IsSwarm": false,
-            "Address": "",
-            "Discovery": "",
-            "Agent": false,
-            "Master": false,
-            "Host": "tcp://0.0.0.0:3376",
-            "Image": "swarm:latest",
-            "Strategy": "spread",
-            "Heartbeat": 0,
-            "Overcommit": 0,
-            "ArbitraryFlags": [],
-            "ArbitraryJoinFlags": [],
-            "Env": null,
-            "IsExperimental": false
-        },
-        "AuthOptions": {
-            "CertDir": "$machineHome/.docker/machine/machines/$machineName",
-            "CaCertPath": "$machineHome/.docker/machine/machines/$machineName/ca.pem",
-            "CaPrivateKeyPath": "$machineHome/.docker/machine/machines/$machineName/ca-key.pem",
-            "CaCertRemotePath": "",
-            "ServerCertPath": "$machineHome/.docker/machine/machines/$machineName/server.pem",
-            "ServerKeyPath": "$machineHome/.docker/machine/machines/$machineName/server-key.pem",
-            "ClientKeyPath": "$machineHome/.docker/machine/machines/$machineName/key.pem",
-            "ServerCertRemotePath": "",
-            "ServerKeyRemotePath": "",
-            "ClientCertPath": "$machineHome/.docker/machine/machines/$machineName/cert.pem",
-            "ServerCertSANs": [],
-            "StorePath": "$machineHome/.docker/machine/machines/$machineName"
-        }
-    },
-    "Name": "$machineName"
+  "Name": "$machineName",
+  "Metadata": {
+    "Description": "$machineName windows-docker-machine"
+  },
+  "Endpoints": {
+    "docker": {
+      "Host": "tcp://${machineIp}:2376",
+      "SkipTLSVerify": false
+    }
+  }
 }
 "@
 
   Write-Host "`n=== Creating / Updating $machineConfigJson"
-  $config | Set-Content $machineConfigJson -Encoding Ascii
+  $config | Set-Content $contextMetaJson -Encoding Ascii
 
-  Write-Host "`n=== Copying Client certificates to $machinePath"
-  copy $serverCertsPath\ca.pem $machinePath\ca.pem
-  copy $clientCertsPath\cert.pem $machinePath\cert.pem
-  copy $clientCertsPath\key.pem $machinePath\key.pem
-}
-
-function sed($file, $search, $replace) {
-  Write-Host "Replacing '$search' with '$replace' in file '$file'"
-  if (!(Test-Path "$file.bak")) {
-    Copy-Item "$file" "$file.bak"
-    $content = [io.file]::ReadAllBytes($file)
-    $m = [Regex]::Match([Text.Encoding]::ASCII.GetString($content), [Regex]::Escape($search))
-    if ($m.Success) {
-      Write-Host "Found '$search' at position $($m.Index)"
-      $enc = [system.Text.Encoding]::UTF8
-      [Byte[]]$replacementString = $enc.GetBytes($replace);
-      $fileStream = [System.IO.File]::Open($file, [System.IO.FileMode]::Open, [System.IO.FileAccess]::Write, [System.IO.FileShare]::ReadWrite)
-      $binaryWriter = New-Object System.IO.BinaryWriter($fileStream)
-      $binaryWriter.BaseStream.Position = $m.Index;
-      $binaryWriter.Write($replacementString)
-      $fileStream.Close()
-    } else {
-      Write-Host "'$search' not found."
-    }
-  } else {
-    Write-Host "Fix already applied."
-  }
+  Write-Host "`n=== Copying Client certificates to $contextCertPath"
+  copy $serverCertsPath\ca.pem $contextCertPath\ca.pem
+  copy $clientCertsPath\cert.pem $contextCertPath\cert.pem
+  copy $clientCertsPath\key.pem $contextCertPath\key.pem
 }
 
 $dockerData = "$env:ProgramData\docker"
@@ -294,16 +215,25 @@ createCerts $rootCert $serverCertsPath $serverName $ipAddresses $clientCertsPath
 updateConfig "$dockerData\config\daemon.json" $serverCertsPath $enableLCOW $experimental
 
 if ($machineName) {
-  $machinePath = "$env:USERPROFILE\.docker\machine\machines\$machineName"
-  ensureDirs @($machinePath)
-  createMachineConfig $machineName $machineHome $machinePath $machineIp $serverCertsPath $clientCertsPath
-}
+  $ofs = ''
+  $contextSha = "$(new-object System.Security.Cryptography.SHA256Managed | ForEach-Object {$_.ComputeHash([System.Text.Encoding]::UTF8.GetBytes($machineName))} | ForEach-Object {$_.ToString('x2')})"
+  $ofs = ' '
 
-Write-Host "`n=== Copying Docker Machine configuration to $homeDir\.docker\machine\machines\$machineName"
-if (Test-Path "$homeDir\.docker\machine\machines\$machineName") {
-  rm -recurse "$homeDir\.docker\machine\machines\$machineName"
+  $contextMetaPath = "$env:USERPROFILE\.docker\contexts\meta\$contextSha"
+  $contextCertPath = "$env:USERPROFILE\.docker\contexts\tls\$contextSha\docker"
+  ensureDirs @($contextMetaPath, $contextCertPath)
+  createContext $machineName $machineHome $contextMetaPath $contextCertPath $machineIp $serverCertsPath $clientCertsPath
+
+  Write-Host "`n=== Copying Docker Context configuration to $homeDir\.docker\contexts\meta\$contextSha"
+  if (Test-Path "$homeDir\.docker\contexts\meta\$contextSha") {
+    rm -recurse "$homeDir\.docker\contexts\meta\$contextSha"
+  }
+  Copy-Item -Recurse "$env:USERPROFILE\.docker\contexts\meta\$contextSha" "$homeDir\.docker\contexts\meta\$contextSha"
+  if (Test-Path "$homeDir\.docker\contexts\tls\$contextSha") {
+    rm -recurse "$homeDir\.docker\contexts\tls\$contextSha"
+  }
+  Copy-Item -Recurse "$env:USERPROFILE\.docker\contexts\tls\$contextSha" "$homeDir\.docker\contexts\tls\$contextSha"
 }
-Copy-Item -Recurse "$env:USERPROFILE\.docker\machine\machines\$machineName" "$homeDir\.docker\machine\machines\$machineName"
 
 Write-Host "Restarting Docker"
 Stop-Service docker
@@ -311,9 +241,7 @@ dockerd --unregister-service
 if ($enableLCOW) {
   installLCOW  
 }
-dockerd --register-service  
-Write-Host "Reducing minimum API version from 1.24 to 1.15"
-sed "$env:ProgramFiles\docker\dockerd.exe" "1.24" "1.15"
+dockerd --register-service
 
 Start-Service docker
 

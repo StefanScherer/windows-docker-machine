@@ -5,17 +5,18 @@ This Vagrant environment creates a Docker Machine to work on your MacBook with
 Windows containers. You can easily switch between Docker for Mac Linux
 containers and the Windows containers.
 
-![docker on mac](images/docker-on-mac.gif)
+[![Docker Context asciinema](https://asciinema.org/a/8b0NKbNvpKxJhGThjMYCsSNbI.svg)](https://asciinema.org/a/8b0NKbNvpKxJhGThjMYCsSNbI)
 
 ## Many flavors
 
 There are several versions of Windows Server. This is where you
 decide which Vagrant VM should be started.
 
+* `2019-box` - Windows Server 2019 (10.0.17763) LTS Channel, prebuilt from Vagrant Cloud
 * `2019` - Windows Server 2019 (10.0.17763) LTS Channel
 * `1809` - Windows Server, version 1809 (10.0.17763) Semi-Annual Channel
 * `1803` - Windows Server, version 1803 (10.0.17134) Semi-Annual Channel
-* `1709` - Windows Server, version 1709 (10.0.16299) Semi-Annual Channel
+* `2016-box` - Windows Server 2016 (10.0.14393) LTS channel, prebuilt from Vagrant Cloud
 * `2016` - Windows Server 2016 (10.0.14393) LTS channel
 * `insider` - Windows Server Insider builds
 * `lcow` - Windows Server, version 1809 with LCOW enabled
@@ -71,11 +72,6 @@ $ vagrant box add windows_server_1803_docker windows_server_1803_docker_vmware.b
 
 - or -
 
-$ packer build --only=vmware-iso --var iso_url=~/path-to-1709.iso windows_server_1709_docker.json
-$ vagrant box add windows_server_1709_docker windows_server_1709_docker_vmware.box
-
-- or -
-
 $ packer build --only=vmware-iso --var iso_url=~/path-to-insider.iso windows_server_insider_docker.json
 $ vagrant box add windows_server_insider_docker windows_server_insider_vmware_docker.box
 
@@ -93,67 +89,62 @@ swap `vmware` for `virtualbox` in the vagrant commands above.
 ### Create the Docker Machine
 
 Spin up the headless Vagrant box you created earlier with Windows Server 2019 and Docker EE
-installed. It will create the TLS certs and create a `2019` Docker machine for
-your `docker-machine` binary on your Mac.
+installed. It will create the TLS certs and create a `2019-box` Docker context on your Mac.
 
 ```bash
 $ git clone https://github.com/StefanScherer/windows-docker-machine
 $ cd windows-docker-machine
-$ vagrant up --provider vmware_fusion 2019
+$ vagrant up --provider vmware_fusion 2019-box
 
 - or -
 
-$ vagrant up --provider virtualbox 2019
+$ vagrant up --provider virtualbox 2019-box
 ```
 
 ### List your new Docker machine
 
 ```bash
-$ docker-machine ls
-NAME      ACTIVE   DRIVER         STATE     URL                          SWARM   DOCKER    ERRORS
-dev       -        virtualbox     Running   tcp://192.168.99.100:2376            v1.13.0
-linux     -        vmwarefusion   Running                                        Unknown
-2019      *        generic        Running   tcp://192.168.254.135:2376           Unknown
-1803      -        generic        Running   tcp://192.168.254.136:2376           Unknown
-insider   -        generic        Running   tcp://192.168.254.137:2376           Unknown
+$ docker context ls
+NAME                DESCRIPTION                               DOCKER ENDPOINT               KUBERNETES ENDPOINT                ORCHESTRATOR
+2019-box            2019-box windows-docker-machine           tcp://192.168.65.130:2376
+default *           Current DOCKER_HOST based configuration   unix:///var/run/docker.sock   https://localhost:6443 (default)   swarm
+dummy                                                         tcp://1.2.3.4:2375
 ```
-
-Currently there is [an issue](https://github.com/docker/machine/issues/3943)
-that the client API version of `docker-machine` is too old. But switch Docker
-environments works as shown below.
 
 ### Switch to Windows containers
 
 ```bash
-$ eval $(docker-machine env 2019)
+$ docker context use 2019-box
 ```
 
 Now your Mac Docker client talks to the Windows Docker engine:
 
 ```bash
 $ docker version
-Client:
- Version:      17.03.0-ce
- API version:  1.26
- Go version:   go1.7.5
- Git commit:   60ccb22
- Built:        Thu Feb 23 10:40:59 2017
- OS/Arch:      darwin/amd64
+Client: Docker Engine - Community
+ Version:           19.03.0-beta1
+ API version:       1.39 (downgraded from 1.40)
+ Go version:        go1.12.1
+ Git commit:        62240a9
+ Built:             Thu Apr  4 19:15:32 2019
+ OS/Arch:           darwin/amd64
+ Experimental:      false
 
-Server:
- Version:      17.03.0-ee-1
- API version:  1.26 (minimum version 1.24)
- Go version:   go1.7.5
- Git commit:   9094a76
- Built:        Wed Mar  1 00:49:51 2017
- OS/Arch:      windows/amd64
- Experimental: true
+Server: Docker Engine - Enterprise
+ Engine:
+  Version:          18.09.5
+  API version:      1.39 (minimum version 1.24)
+  Go version:       go1.10.8
+  Git commit:       be4553c277
+  Built:            04/11/2019 06:43:04
+  OS/Arch:          windows/amd64
+  Experimental:     false
 ```
 
-### Switch back to Docker for Mac
+### Switch back to Docker Desktop
 
 ```bash
-$ eval $(docker-machine env -unset)
+$ docker context use default
 ```
 
 This removes all DOCKER environment variables and you can use your Docker for
@@ -161,22 +152,24 @@ Mac installation.
 
 ```bash
 $ docker version
-Client:
- Version:      17.03.0-ce
- API version:  1.26
- Go version:   go1.7.5
- Git commit:   60ccb22
- Built:        Thu Feb 23 10:40:59 2017
- OS/Arch:      darwin/amd64
+Client: Docker Engine - Community
+ Version:           19.03.0-beta1
+ API version:       1.39 (downgraded from 1.40)
+ Go version:        go1.12.1
+ Git commit:        62240a9
+ Built:             Thu Apr  4 19:15:32 2019
+ OS/Arch:           darwin/amd64
+ Experimental:      false
 
-Server:
- Version:      17.03.0-ce
- API version:  1.26 (minimum version 1.12)
- Go version:   go1.7.5
- Git commit:   3a232c8
- Built:        Tue Feb 28 07:52:04 2017
- OS/Arch:      linux/amd64
- Experimental: true
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.2
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.6
+  Git commit:       6247962
+  Built:            Sun Feb 10 04:13:06 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
 ```
 
 ### Mounting volumes from your Mac machine
@@ -193,24 +186,22 @@ Windows Container.
 ### Accessing published ports of Windows containers
 
 When you run Windows containers with publish ports then you can use the IP
-address of the Windows Docker host to access it. The `docker-machine` binary can
-give your the IP address with a command.
+address of the Windows Docker host to access it. The `docker context` command in combination with `jq` can give your the IP address with a command.
 
 Example: Run the whoami Windows container and open it in the default macOS
 browser.
 
 ```
 $ docker run -d -p 8080:8080 stefanscherer/whoami
-$ open http://$(docker-machine ip 2019):8080
+$ open http://$(docker context inspect 2019-box | jq -r '.[0].Endpoints.docker.Host | .[6:] | .[:-5]'):8080
 ```
 
 ## Working on Windows
 
 Spin up the headless Vagrant box you created earlier with Windows Server 2019 and Docker EE
-installed. It will create the TLS certs and create a `2019` Docker machine for
-your `docker-machine` binary on your Windows host.
+installed. It will create the TLS certs and create a `2019-box` Docker context on your Windows host.
 
-If you haven't worked with `docker-machine` yet, create the `.docker` directory
+If you haven't worked with `docker context` yet, create the `.docker` directory
 in your user profile manually.
 
 ```powershell
@@ -224,15 +215,15 @@ Choose your hypervisor and start the VM
 ```powershell
 PS C:\> git clone https://github.com/StefanScherer/windows-docker-machine
 PS C:\> cd windows-docker-machine
-PS C:\> vagrant up --provider vmware_workstation 2019
+PS C:\> vagrant up --provider vmware_workstation 2019-box
 
 - or -
 
-PS C:\> vagrant up --provider virtualbox 2019
+PS C:\> vagrant up --provider virtualbox 2019-box
 
 - or -
 
-PS C:\> vagrant up --provider hyperv 2019
+PS C:\> vagrant up --provider hyperv 2019-box
 ```
 
 Notice: The provider `hyperv` does mount the volumes with SMB into the Windows Server 2019
@@ -243,44 +234,46 @@ Windows host) will fail.
 ### List your new Docker machine
 
 ```powershell
-PS C:\> docker-machine ls
-NAME      ACTIVE   DRIVER         STATE     URL                          SWARM   DOCKER    ERRORS
-dev       -        virtualbox     Running   tcp://192.168.99.100:2376            v1.13.0
-2019      *        generic        Running   tcp://192.168.254.135:2376           Unknown
+PS C:\> docker context ls
+NAME                DESCRIPTION                               DOCKER ENDPOINT               KUBERNETES ENDPOINT                ORCHESTRATOR
+2019-box            2019-box windows-docker-machine           tcp://192.168.65.130:2376
+default *           Current DOCKER_HOST based configuration   unix:///var/run/docker.sock   https://localhost:6443 (default)   swarm
 ```
 
 ### Switch to Windows containers
 
 ```powershell
-PS C:\> docker-machine env windows | iex
+PS C:\> docker context use 2019-box
 ```
 
 Now your Windows Docker client talks to the Windows Docker engine:
 
 ```powershell
 PS C:\> docker version
-Client:
- Version:      17.03.0-ce
- API version:  1.26
- Go version:   go1.7.5
- Git commit:   60ccb22
- Built:        Thu Feb 23 10:40:59 2017
- OS/Arch:      windows/amd64
+Client: Docker Engine - Community
+ Version:           19.03.0-beta1
+ API version:       1.39 (downgraded from 1.40)
+ Go version:        go1.12.1
+ Git commit:        62240a9
+ Built:             Thu Apr  4 19:15:32 2019
+ OS/Arch:           darwin/amd64
+ Experimental:      false
 
-Server:
- Version:      17.03.0-ee-1
- API version:  1.26 (minimum version 1.24)
- Go version:   go1.7.5
- Git commit:   9094a76
- Built:        Wed Mar  1 00:49:51 2017
- OS/Arch:      windows/amd64
- Experimental: true
+Server: Docker Engine - Enterprise
+ Engine:
+  Version:          18.09.5
+  API version:      1.39 (minimum version 1.24)
+  Go version:       go1.10.8
+  Git commit:       be4553c277
+  Built:            04/11/2019 06:43:04
+  OS/Arch:          windows/amd64
+  Experimental:     false
 ```
 
 ### Switch to back to Docker for Windows
 
 ```powershell
-PS C:\> docker-machine env -unset | iex
+PS C:\> docker context use default
 ```
 
 This removes all DOCKER environment variables and you can use your Docker for
@@ -288,22 +281,25 @@ Windows installation.
 
 ```powershell
 PS C:\> docker version
-Client:
- Version:      17.03.0-ce
- API version:  1.26
- Go version:   go1.7.5
- Git commit:   60ccb22
- Built:        Thu Feb 23 10:40:59 2017
- OS/Arch:      windows/amd64
+Client: Docker Engine - Community
+ Version:           19.03.0-beta1
+ API version:       1.39 (downgraded from 1.40)
+ Go version:        go1.12.1
+ Git commit:        62240a9
+ Built:             Thu Apr  4 19:15:32 2019
+ OS/Arch:           darwin/amd64
+ Experimental:      false
 
-Server:
- Version:      17.03.0-ce
- API version:  1.26 (minimum version 1.12)
- Go version:   go1.7.5
- Git commit:   3a232c8
- Built:        Tue Feb 28 07:52:04 2017
- OS/Arch:      linux/amd64
- Experimental: true
+Server: Docker Engine - Community
+ Engine:
+  Version:          18.09.2
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.6
+  Git commit:       6247962
+  Built:            Sun Feb 10 04:13:06 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+
 ```
 
 ### Mounting volumes from your Windows machine
@@ -320,32 +316,34 @@ Windows Container.
 ### Accessing published ports of Windows containers
 
 When you run Windows containers with publish ports then you can use the IP
-address of the Windows Docker host to access it. The `docker-machine` binary can
+address of the Windows Docker host to access it. The `docker context inspect` command can
 give your the IP address with a command.
 
 Example: Run the whoami Windows container and open it in the default browser.
 
 ```powershell
 PS C:\> docker run -d -p 8080:8080 stefanscherer/whoami
-PS C:\> start http://$(docker-machine ip 2019):8080
+PS C:\> start http://$(docker-machine ip 2019-box):8080
 ```
 
 ## Further commands
 
-Here is a list of `docker-machine` commands and the equivalent Vagrant command.
+Here is a list of `vagrant` and `docker` commands for typical actions.
 I use a `bash` function
 [`dm` in my dotfiles repo](https://github.com/StefanScherer/dotfiles/blob/7ce1752b3fd397797d94ff9017cbfbfd50913d78/.functions#L152-L177)
 to simplify all the tasks without switching to the Vagrant folder each time.
+The `dm` started as a shortcut for `docker-machine` commands. I have updated the function to work with `docker context`, but kept the good parts.
 
-| Docker-machine command                 | Vagrant equivalent               | dm                         |
-| -------------------------------------- | -------------------------------- | -------------------------- |
-| `docker-machine create -d xxx 2019`    | `vagrant up --provider xxx 2019` | `dm start 2019`            |
-| `docker-machine regenerate-certs 2019` | `vagrant provision 2019`         | `dm regenerate-certs 2019` |
-| `docker-machine stop 2019`             | `vagrant halt 2019`              | `dm stop 2019`             |
-| `docker-machine start 2019`            | `vagrant up 2019`                | `dm start 2019`            |
-| `docker-machine ssh 2019`              | `vagrant rdp 2019`               | `dm rdp 2019`              |
-| `docker-machine rm 2019`               | `vagrant destroy 2019`           | `dm rm 2019`               |
-| `eval $(docker-machine env 2019)`      |                                  | `dm 2019`                  |
+| dm shortcut                    | Vagrant / Docker command             |
+| ------------------------------ | ------------------------------------ |
+| `dm start 2019-box`            | `vagrant up --provider xxx 2019-box` |
+| `dm regenerate-certs 2019-box` | `vagrant provision 2019-box`         |
+| `dm stop 2019-box`             | `vagrant halt 2019-box`              |
+| `dm start 2019-box`            | `vagrant up 2019-box`                |
+| `dm rdp 2019-box`              | `vagrant rdp 2019-box`               |
+| `dm rm [-f] 2019-box`          | `vagrant destroy [-f] 2019-box`      |
+| `dm 2019-box`                  | `docker context use 2019-box`        |
+| `dm ip 2019-box`               | <code>docker context inspect 2019-box &#124; jq -r '.[0].Endpoints.docker.Host &#124; .[6:] &#124; .[:-5]'</code> |
 
 ## Insider builds
 
@@ -372,15 +370,11 @@ Then spin up your Insider machine with
 vagrant up insider
 ```
 
-This Vagrant box has Docker 18.09.0 installed and the following base
+This Vagrant box has Docker installed and the following base
 images are already pulled from Docker Hub:
 
-* microsoft/windowsservercore-insider
-* microsoft/nanoserver-insider
-
-There is also some languages and runtimes available as insider images:
-
-* stefanscherer/node-windows
+* mcr.microsoft.com/windows/servercore/insider
+* mcr.microsoft.com/windows/nanoserver/insider
 
 ## LCOW
 
@@ -390,6 +384,6 @@ also use Windows Insider Server Preview as base box.
 
 ```
 vagrant up lcow
-eval $(docker-machine env lcow)
+docker context use lcow
 docker run alpine uname -a
 ```
