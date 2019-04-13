@@ -323,17 +323,16 @@ I use a `bash` function
 to simplify all the tasks without switching to the Vagrant folder each time.
 The `dm` started as a shortcut for `docker-machine` commands. I have updated the function to work with `docker context`, but kept the good parts.
 
-| Docker command                         | Vagrant command                  | dm                         |
-| -------------------------------------- | -------------------------------- | -------------------------- |
-|                                        | `vagrant up --provider xxx 2019` | `dm start 2019`            |
-|                                        | `vagrant provision 2019`         | `dm regenerate-certs 2019` |
-|                                        | `vagrant halt 2019`              | `dm stop 2019`             |
-|                                        | `vagrant up 2019`                | `dm start 2019`            |
-|                                        | `vagrant rdp 2019`               | `dm rdp 2019`              |
-|                                        | `vagrant destroy [-f] 2019`      | `dm rm [-f] 2019`               |
-| `docker context use 2019`              |                                  | `dm 2019`                  |
-| <code>docker context inspect 2019 &#124; jq -r '.[0].Endpoints.docker.Host &#124; .[6:] &#124; .[:-5]'</code> |  | `dm ip 2019`   |
-
+| dm shortcut                | Vagrant / Docker command   |
+| -------------------------- | -------------------------------- |
+| `dm start 2019`            | `vagrant up --provider xxx 2019` |
+| `dm regenerate-certs 2019` | `vagrant provision 2019`         |
+| `dm stop 2019`             | `vagrant halt 2019`              |
+| `dm start 2019`            | `vagrant up 2019`                |
+| `dm rdp 2019`              | `vagrant rdp 2019`               |
+| `dm rm [-f] 2019`          | `vagrant destroy [-f] 2019`      |
+| `dm 2019`                  | `docker context use 2019`        |
+| `dm ip 2019`               | <code>docker context inspect 2019 &#124; jq -r '.[0].Endpoints.docker.Host &#124; .[6:] &#124; .[:-5]'</code> |
 
 ## Insider builds
 
