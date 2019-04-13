@@ -94,7 +94,7 @@ installed. It will create the TLS certs and create a `2019-box` Docker context o
 ```bash
 $ git clone https://github.com/StefanScherer/windows-docker-machine
 $ cd windows-docker-machine
-$ vagrant up --provider vmware_fusion 2019-box
+$ vagrant up --provider vmware_desktop 2019-box
 
 - or -
 
@@ -215,7 +215,7 @@ Choose your hypervisor and start the VM
 ```powershell
 PS C:\> git clone https://github.com/StefanScherer/windows-docker-machine
 PS C:\> cd windows-docker-machine
-PS C:\> vagrant up --provider vmware_workstation 2019-box
+PS C:\> vagrant up --provider vmware_desktop 2019-box
 
 - or -
 
