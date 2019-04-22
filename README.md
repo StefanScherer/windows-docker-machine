@@ -12,7 +12,7 @@ containers and the Windows containers.
 There are several versions of Windows Server. This is where you
 decide which Vagrant VM should be started.
 
-* `2019-box` - Windows Server 2019 (10.0.17763) LTS Channel, prebuilt from Vagrant Cloud
+* `2019-box` - Windows Server 2019 (10.0.17763) LTS Channel, ___***prebuilt from Vagrant Cloud***___
 * `2019` - Windows Server 2019 (10.0.17763) LTS Channel
 * `1903` - Windows Server, version 1903 (10.0.18362) Semi-Annual Channel
 * `1809` - Windows Server, version 1809 (10.0.17763) Semi-Annual Channel
