@@ -14,6 +14,7 @@ decide which Vagrant VM should be started.
 
 * `2019-box` - Windows Server 2019 (10.0.17763) LTS Channel, prebuilt from Vagrant Cloud
 * `2019` - Windows Server 2019 (10.0.17763) LTS Channel
+* `1903` - Windows Server, version 1903 (10.0.18362) Semi-Annual Channel
 * `1809` - Windows Server, version 1809 (10.0.17763) Semi-Annual Channel
 * `1803` - Windows Server, version 1803 (10.0.17134) Semi-Annual Channel
 * `2016-box` - Windows Server 2016 (10.0.14393) LTS channel, prebuilt from Vagrant Cloud
@@ -21,19 +22,19 @@ decide which Vagrant VM should be started.
 * `insider` - Windows Server Insider builds
 * `lcow` - Windows Server, version 1809 with LCOW enabled
 
-So with a `vagrant up 2019` you spin up the LTS version, with `vagrant up 1809`
-the 1809 semi-annual version and with `vagrant up insider` the Insider build.
+So with a `vagrant up 2019` you spin up the LTS version, with `vagrant up 1903`
+the 1903 semi-annual version and with `vagrant up insider` the Insider build.
 
 If you don't want to run the **packer** step, you can run `vagrant up 2019-box`
 and get your box downloaded directly from [Vagrant Cloud](https://app.vagrantup.com/StefanScherer/boxes/windows_2019_docker).
 
 Tested environments
 
-* macOS with Vagrant 2.2.0
-  * VMware Fusion Pro 11.0.1
-  * VirtualBox 5.2.20
-* Windows with Vagrant 2.2.0
-  * VMware Workstation Pro 14.1.3
+* macOS with Vagrant 2.2.4
+  * VMware Fusion Pro 11.0.3
+  * VirtualBox 5.2.26
+* Windows with Vagrant 2.2.4
+  * VMware Workstation Pro 15.0.3
   * (VirtualBox see issue
     [#2](https://github.com/StefanScherer/windows-docker-machine/issues/2))
   * (Hyper-V see issue
@@ -59,6 +60,11 @@ $ cd packer-windows
 
 $ packer build --only=vmware-iso windows_2019_docker.json
 $ vagrant box add windows_2019_docker windows_2019_docker_vmware.box
+
+- or -
+
+$ packer build --only=vmware-iso --var iso_url=~/path-to-1903.iso windows_server_1903_docker.json
+$ vagrant box add windows_server_1903_docker windows_server_1903_docker_vmware.box
 
 - or -
 
@@ -379,7 +385,7 @@ images are already pulled from Docker Hub:
 ## LCOW
 
 You can try the Linux Container on Windows feature in a separate machine `lcow`.
-It is preconfigured to use the Windows Server, version 1809. But you can
+It is preconfigured to use the Windows Server, version 1903. But you can
 also use Windows Insider Server Preview as base box.
 
 ```
