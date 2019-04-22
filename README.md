@@ -12,12 +12,12 @@ containers and the Windows containers.
 There are several versions of Windows Server. This is where you
 decide which Vagrant VM should be started.
 
-* `2019-box` - Windows Server 2019 (10.0.17763) LTS Channel, prebuilt from Vagrant Cloud
+* `2019-box` - Windows Server 2019 (10.0.17763) LTS Channel, ___***prebuilt from Vagrant Cloud***___
 * `2019` - Windows Server 2019 (10.0.17763) LTS Channel
 * `1903` - Windows Server, version 1903 (10.0.18362) Semi-Annual Channel
 * `1809` - Windows Server, version 1809 (10.0.17763) Semi-Annual Channel
 * `1803` - Windows Server, version 1803 (10.0.17134) Semi-Annual Channel
-* `2016-box` - Windows Server 2016 (10.0.14393) LTS channel, prebuilt from Vagrant Cloud
+* `2016-box` - Windows Server 2016 (10.0.14393) LTS channel, ___****prebuilt from Vagrant Cloud***___
 * `2016` - Windows Server 2016 (10.0.14393) LTS channel
 * `insider` - Windows Server Insider builds
 * `lcow` - Windows Server, version 1809 with LCOW enabled
@@ -47,9 +47,9 @@ First you need the Windows Server 2019 VM for your hypervisor. I prefer
 
 ![packer vagrant docker](images/packer_vagrant_docker.png)
 
-1. **packer build** to build a Vagrant base box, it's like a Docker image, but
-   for Vagrant VM's
-2. **vagrant up** to create a running VM instance of Windows Server
+1. (optional) **packer build** to build a Vagrant base box, it's like a Docker image, but
+   for Vagrant VM's. 
+2. **vagrant up** to create a running VM instance of Windows Server, either using the `packer build` or by using one of the pre-built vagrant cloud binaries: `2019-box` or `2016-box`.
 3. **docker run** to run Windows containers in that Windows VM
 
 Step 1 (building the headless Vagrant box) can be done with these steps:
