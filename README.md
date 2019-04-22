@@ -47,9 +47,9 @@ First you need the Windows Server 2019 VM for your hypervisor. I prefer
 
 ![packer vagrant docker](images/packer_vagrant_docker.png)
 
-1. **packer build** to build a Vagrant base box, it's like a Docker image, but
-   for Vagrant VM's, or use one of the pre-built vagrant cloud binaries `2019-box` or `2016-box`.
-2. **vagrant up** to create a running VM instance of Windows Server
+1. (optional) **packer build** to build a Vagrant base box, it's like a Docker image, but
+   for Vagrant VM's. 
+2. **vagrant up** to create a running VM instance of Windows Server, either using the `packer build` or by using one of the pre-built vagrant cloud binaries: `2019-box` or `2016-box`.
 3. **docker run** to run Windows containers in that Windows VM
 
 Step 1 (building the headless Vagrant box) can be done with these steps:
