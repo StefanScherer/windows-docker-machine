@@ -1,8 +1,8 @@
 # Windows Docker Machine
 [![Build status](https://ci.appveyor.com/api/projects/status/f1i6eotfeghj22u3?svg=true)](https://ci.appveyor.com/project/StefanScherer/windows-docker-machine)
 
-This Vagrant environment creates a Docker Machine to work on your MacBook with
-Windows containers. You can easily switch between Docker for Mac Linux
+This Vagrant environment creates a "Docker Machine" to work on your MacBook with
+Windows containers. You can easily switch between Docker Desktop Linux
 containers and the Windows containers.
 
 [![Docker Context asciinema](https://asciinema.org/a/8b0NKbNvpKxJhGThjMYCsSNbI.svg)](https://asciinema.org/a/8b0NKbNvpKxJhGThjMYCsSNbI)
@@ -95,7 +95,7 @@ swap `vmware` for `virtualbox` in the vagrant commands above.
 ### Create the Docker Machine
 
 Spin up the headless Vagrant box you created earlier with Windows Server 2019 and Docker EE
-installed. It will create the TLS certs and create a `2019-box` Docker context on your Mac.
+installed. It will create the TLS certs and create a `2019-box` Docker context (new with Docker 19.03) and docker-machine configuration on your Mac.
 
 ```bash
 $ git clone https://github.com/StefanScherer/windows-docker-machine
@@ -192,7 +192,7 @@ Windows Container.
 ### Accessing published ports of Windows containers
 
 When you run Windows containers with publish ports then you can use the IP
-address of the Windows Docker host to access it. The `docker context` command in combination with `jq` can give your the IP address with a command.
+address of the Windows Docker host to access it. The `docker context` command in combination with `jq` can give your the IP address with a command. Alternatively `docker-machine ip` also gives you the IP address.
 
 Example: Run the whoami Windows container and open it in the default macOS
 browser.
@@ -200,12 +200,16 @@ browser.
 ```
 $ docker run -d -p 8080:8080 stefanscherer/whoami
 $ open http://$(docker context inspect 2019-box | jq -r '.[0].Endpoints.docker.Host | .[6:] | .[:-5]'):8080
+
+- or -
+
+$ open http://$(docker-machine ip 2019-box):8080
 ```
 
 ## Working on Windows
 
 Spin up the headless Vagrant box you created earlier with Windows Server 2019 and Docker EE
-installed. It will create the TLS certs and create a `2019-box` Docker context on your Windows host.
+installed. It will create the TLS certs and create a `2019-box` Docker context and docker-machine configuration on your Windows host.
 
 If you haven't worked with `docker context` yet, create the `.docker` directory
 in your user profile manually.
