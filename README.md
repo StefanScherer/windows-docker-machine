@@ -336,9 +336,9 @@ PS C:\> start http://$(docker-machine ip 2019-box):8080
 
 Here is a list of `vagrant` and `docker` commands for typical actions.
 I use a `bash` function
-[`dm` in my dotfiles repo](https://github.com/StefanScherer/dotfiles/blob/2e771b023d97d9ec91fb20633204903c9f3b21eb/.functions#L140-L183)
+[`dm` in my dotfiles repo](https://github.com/StefanScherer/dotfiles/blob/4517216a56708acad5c2c0809f6bfafbd880aea3/.functions#L140-L182)
 to simplify all the tasks without switching to the Vagrant folder each time.
-The `dm` started as a shortcut for `docker-machine` commands. I have updated the function to work with `docker context`, but kept the good parts.
+The `dm` started as a shortcut for `docker-machine` commands. I have [updated the function](https://github.com/StefanScherer/dotfiles/commit/2e771b023d97d9ec91fb20633204903c9f3b21eb#diff-e39ded4129d0efa321423853506c0116) to work with `docker context`, but rolled back for now as I prefer the environment variables to have different "contexts" per terminal tab.
 
 | dm shortcut                    | Vagrant / Docker command             |
 | ------------------------------ | ------------------------------------ |
@@ -348,8 +348,8 @@ The `dm` started as a shortcut for `docker-machine` commands. I have updated the
 | `dm start 2019-box`            | `vagrant up 2019-box`                |
 | `dm rdp 2019-box`              | `vagrant rdp 2019-box`               |
 | `dm rm [-f] 2019-box`          | `vagrant destroy [-f] 2019-box`      |
-| `dm 2019-box`                  | `docker context use 2019-box`        |
-| `dm ip 2019-box`               | <code>docker context inspect 2019-box &#124; jq -r '.[0].Endpoints.docker.Host &#124; .[6:] &#124; .[:-5]'</code> |
+| `dm 2019-box`                  | `docker context use 2019-box` or <br/> `eval $(docker-machine env 2019-box)`       |
+| `dm ip 2019-box`               | <code>docker context inspect 2019-box &#124; jq -r '.[0].Endpoints.docker.Host &#124; .[6:] &#124; .[:-5]'</code> or <br/> `docker-machine ip 2019-box` |
 
 ## Insider builds
 
@@ -366,7 +366,7 @@ is tested on a Mac with the following steps.
 ```bash
 git clone https://github.com/StefanScherer/packer-windows
 cd packer-windows
-packer build --only=vmware-iso --var iso_url=~/Downloads/Windows_InsiderPreview_Server_2_17035.iso windows_server_insider_docker.json
+packer build --only=vmware-iso --var iso_url=~/Downloads/Windows_InsiderPreview_Server_en-us_18356.iso windows_server_insider_docker.json
 vagrant box add windows_server_insider_docker windows_server_insider_docker_vmware.box
 ```
 

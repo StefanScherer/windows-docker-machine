@@ -202,6 +202,89 @@ function createContext ($machineName, $machineHome, $contextMetaPath, $contextCe
   copy $clientCertsPath\key.pem $contextCertPath\key.pem
 }
 
+function createMachineConfig ($machineName, $machineHome, $machinePath, $machineIp, $serverCertsPath, $clientCertsPath) {
+  $machineConfigJson = "$machinePath\config.json"
+
+  $config = @"
+{
+    "ConfigVersion": 3,
+    "Driver": {
+        "IPAddress": "$machineIp",
+        "MachineName": "$machineName",
+        "SSHUser": "none",
+        "SSHPort": 3389,
+        "SSHKeyPath": "",
+        "StorePath": "$machineHome/.docker/machine",
+        "SwarmMaster": false,
+        "SwarmHost": "",
+        "SwarmDiscovery": "",
+        "EnginePort": 2376,
+        "SSHKey": ""
+    },
+    "DriverName": "generic",
+    "HostOptions": {
+        "Driver": "",
+        "Memory": 0,
+        "Disk": 0,
+        "EngineOptions": {
+            "ArbitraryFlags": [],
+            "Dns": null,
+            "GraphDir": "",
+            "Env": [],
+            "Ipv6": false,
+            "InsecureRegistry": [],
+            "Labels": [],
+            "LogLevel": "",
+            "StorageDriver": "",
+            "SelinuxEnabled": false,
+            "TlsVerify": true,
+            "RegistryMirror": [],
+            "InstallURL": "https://get.docker.com"
+        },
+        "SwarmOptions": {
+            "IsSwarm": false,
+            "Address": "",
+            "Discovery": "",
+            "Agent": false,
+            "Master": false,
+            "Host": "tcp://0.0.0.0:3376",
+            "Image": "swarm:latest",
+            "Strategy": "spread",
+            "Heartbeat": 0,
+            "Overcommit": 0,
+            "ArbitraryFlags": [],
+            "ArbitraryJoinFlags": [],
+            "Env": null,
+            "IsExperimental": false
+        },
+        "AuthOptions": {
+            "CertDir": "$machineHome/.docker/machine/machines/$machineName",
+            "CaCertPath": "$machineHome/.docker/machine/machines/$machineName/ca.pem",
+            "CaPrivateKeyPath": "$machineHome/.docker/machine/machines/$machineName/ca-key.pem",
+            "CaCertRemotePath": "",
+            "ServerCertPath": "$machineHome/.docker/machine/machines/$machineName/server.pem",
+            "ServerKeyPath": "$machineHome/.docker/machine/machines/$machineName/server-key.pem",
+            "ClientKeyPath": "$machineHome/.docker/machine/machines/$machineName/key.pem",
+            "ServerCertRemotePath": "",
+            "ServerKeyRemotePath": "",
+            "ClientCertPath": "$machineHome/.docker/machine/machines/$machineName/cert.pem",
+            "ServerCertSANs": [],
+            "StorePath": "$machineHome/.docker/machine/machines/$machineName"
+        }
+    },
+    "Name": "$machineName"
+}
+"@
+
+  Write-Host "`n=== Creating / Updating $machineConfigJson"
+  $config | Set-Content $machineConfigJson -Encoding Ascii
+
+  Write-Host "`n=== Copying Client certificates to $machinePath"
+  copy $serverCertsPath\ca.pem $machinePath\ca.pem
+  copy $clientCertsPath\cert.pem $machinePath\cert.pem
+  copy $clientCertsPath\key.pem $machinePath\key.pem
+}
+
 $dockerData = "$env:ProgramData\docker"
 $userPath = "$env:USERPROFILE\.docker"
 
@@ -215,6 +298,17 @@ createCerts $rootCert $serverCertsPath $serverName $ipAddresses $clientCertsPath
 updateConfig "$dockerData\config\daemon.json" $serverCertsPath $enableLCOW $experimental
 
 if ($machineName) {
+  # write docker-machine configuration file and certs
+  $machinePath = "$env:USERPROFILE\.docker\machine\machines\$machineName"
+  ensureDirs @($machinePath)
+  createMachineConfig $machineName $machineHome $machinePath $machineIp $serverCertsPath $clientCertsPath
+  Write-Host "`n=== Copying Docker Machine configuration to $homeDir\.docker\machine\machines\$machineName"
+  if (Test-Path "$homeDir\.docker\machine\machines\$machineName") {
+    rm -recurse "$homeDir\.docker\machine\machines\$machineName"
+  }
+  Copy-Item -Recurse "$env:USERPROFILE\.docker\machine\machines\$machineName" "$homeDir\.docker\machine\machines\$machineName"
+
+  # write docker context configuration file and certs
   $ofs = ''
   $contextSha = "$(new-object System.Security.Cryptography.SHA256Managed | ForEach-Object {$_.ComputeHash([System.Text.Encoding]::UTF8.GetBytes($machineName))} | ForEach-Object {$_.ToString('x2')})"
   $ofs = ' '
