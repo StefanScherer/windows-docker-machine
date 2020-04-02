@@ -87,6 +87,7 @@ function createCerts($rootCert, $serverCertsPath, $serverName, $ipAddresses, $cl
   $parms = @{
     CertStoreLocation = "Cert:\CurrentUser\My";
     Signer = $rootCert;
+    Subject = "CN=serverCert";
     KeyExportPolicy = "Exportable";
     Provider = "Microsoft Enhanced Cryptographic Provider v1.0";
     Type = "SSLServerAuthentication";
@@ -109,9 +110,9 @@ function createCerts($rootCert, $serverCertsPath, $serverName, $ipAddresses, $cl
   $privateKeyFromCert = [System.Security.Cryptography.X509Certificates.RSACertificateExtensions]::GetRSAPrivateKey($serverCert)
   $parms = @{
     Path = "$serverCertsPath\server-key.pem";
-    Value = ("-----BEGIN RSA PRIVATE KEY-----`n" `
+    Value = ("-----BEGIN PRIVATE KEY-----`n" `
           + [System.Convert]::ToBase64String($privateKeyFromCert.Key.Export([System.Security.Cryptography.CngKeyBlobFormat]::Pkcs8PrivateBlob), [System.Base64FormattingOptions]::InsertLineBreaks) `
-          + "`n-----END RSA PRIVATE KEY-----");
+          + "`n-----END PRIVATE KEY-----");
     Encoding = "Ascii";
   }
   Set-Content @parms
@@ -140,9 +141,9 @@ function createCerts($rootCert, $serverCertsPath, $serverName, $ipAddresses, $cl
   $clientprivateKeyFromCert = [System.Security.Cryptography.X509Certificates.RSACertificateExtensions]::GetRSAPrivateKey($clientCert)
   $parms = @{
     Path = "$clientCertsPath\key.pem";
-    Value = ("-----BEGIN RSA PRIVATE KEY-----`n" `
+    Value = ("-----BEGIN PRIVATE KEY-----`n" `
           + [System.Convert]::ToBase64String($clientprivateKeyFromCert.Key.Export([System.Security.Cryptography.CngKeyBlobFormat]::Pkcs8PrivateBlob), [System.Base64FormattingOptions]::InsertLineBreaks) `
-          + "`n-----END RSA PRIVATE KEY-----");
+          + "`n-----END PRIVATE KEY-----");
     Encoding = "Ascii";
   }
   Set-Content @parms
@@ -237,7 +238,7 @@ function createMachineConfig ($machineName, $machineHome, $machinePath, $machine
             "LogLevel": "",
             "StorageDriver": "",
             "SelinuxEnabled": false,
-            "TlsVerify": true,
+            "TlsVerify": false,
             "RegistryMirror": [],
             "InstallURL": "https://get.docker.com"
         },
