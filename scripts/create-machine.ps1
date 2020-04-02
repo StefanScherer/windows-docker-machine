@@ -238,7 +238,7 @@ function createMachineConfig ($machineName, $machineHome, $machinePath, $machine
             "LogLevel": "",
             "StorageDriver": "",
             "SelinuxEnabled": false,
-            "TlsVerify": false,
+            "TlsVerify": true,
             "RegistryMirror": [],
             "InstallURL": "https://get.docker.com"
         },
