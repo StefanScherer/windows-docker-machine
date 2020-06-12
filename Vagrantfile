@@ -10,12 +10,12 @@ Vagrant.configure("2") do |config|
   home = ENV['HOME'].gsub('\\', '/')
   config.vm.synced_folder home, home
 
-  config.vm.define "2016" do |cfg|
+  config.vm.define "2016", autostart: false do |cfg|
     cfg.vm.box     = "windows_2016_docker"
     cfg.vm.provision "shell", path: "scripts/create-machine.ps1", args: "-machineHome #{home} -machineName 2016"
   end
 
-  config.vm.define "2016-box" do |cfg|
+  config.vm.define "2016-box", autostart: false do |cfg|
     cfg.vm.box     = "StefanScherer/windows_2016_docker"
     cfg.vm.provision "shell", path: "scripts/create-machine.ps1", args: "-machineHome #{home} -machineName 2016-box"
   end
