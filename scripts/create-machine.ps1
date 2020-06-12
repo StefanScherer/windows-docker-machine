@@ -14,6 +14,7 @@ if (!$machineIp) {
       ( ! ($_.InterfaceAlias).StartsWith("vEthernet (") ) `
       -And $_.IPAddress -Ne "127.0.0.1" `
       -And $_.IPAddress -Ne "10.0.2.15" `
+      -And !($_.IPAddress.StartsWith("169.254.")) `
     }).IPAddress
 } else {
   $ipAddresses = "$ipAddresses,$machineIp"
