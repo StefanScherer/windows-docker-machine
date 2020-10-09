@@ -397,3 +397,13 @@ vagrant up lcow
 docker context use lcow
 docker run alpine uname -a
 ```
+
+## Cleanup
+
+If you want to cleanup your machine again after playing with Windows Containers, use the following commands
+
+```
+vagrant destroy -f
+vagrant box remove StefanScherer/windows_2019_docker
+docker context rm 2019-box
+```
