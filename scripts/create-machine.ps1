@@ -2,6 +2,12 @@ param ([String] $machineHome, [String] $machineName, [String] $machineIp, [Switc
 
 $ErrorActionPreference = 'Stop';
 
+# Extend volume 1 to the full size of the resized disk
+Set-Content -Value "select volume 1" -Path C:\diskpart.txt
+Add-Content -Value "extend" -Path C:\diskpart.txt
+diskpart /s C:\diskpart.txt
+del C:\diskpart.txt
+
 if (!(Test-Path $env:USERPROFILE\.docker)) {
   mkdir $env:USERPROFILE\.docker
 }
