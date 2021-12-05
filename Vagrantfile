@@ -86,7 +86,7 @@ Vagrant.configure("2") do |config|
     v.customize ["modifyvm", :id, "--nested-hw-virt", "on"]
     # Use the recommended paravirtualization interface for windows (hyperv) - requires VirtualBox 6
     v.customize ["modifyvm", :id, "--paravirtprovider", "hyperv"]
-    override.vm.network :private_network, ip: "192.168.99.90", gateway: "192.168.99.1"
+    override.vm.network :private_network, ip: "192.168.59.90", gateway: "192.168.56.1"
   end
 
   config.vm.provider "hyperv" do |v|
