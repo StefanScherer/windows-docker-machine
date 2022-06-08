@@ -18,6 +18,9 @@ Vagrant.configure("2") do |config|
   config.vm.define "2016-box", autostart: false do |cfg|
     cfg.vm.box     = "StefanScherer/windows_2016_docker"
     cfg.vm.provision "shell", path: "scripts/create-machine.ps1", args: "-machineHome #{home} -machineName 2016-box"
+    cfg.vm.provider "virtualbox" do |v, override|
+      override.vm.network :private_network, ip: "192.168.59.50", gateway: "192.168.56.1"
+    end
   end
 
   config.vm.define "1709", autostart: false do |cfg|
@@ -48,6 +51,9 @@ Vagrant.configure("2") do |config|
   config.vm.define "2019-box", autostart: false do |cfg|
     cfg.vm.box     = "StefanScherer/windows_2019_docker"
     cfg.vm.provision "shell", path: "scripts/create-machine.ps1", args: "-machineHome #{home} -machineName 2019-box"
+    cfg.vm.provider "virtualbox" do |v, override|
+      override.vm.network :private_network, ip: "192.168.59.51", gateway: "192.168.56.1"
+    end
   end
 
   config.vm.define "2022", autostart: false do |cfg|
@@ -58,6 +64,9 @@ Vagrant.configure("2") do |config|
   config.vm.define "2022-box", autostart: false do |cfg|
     cfg.vm.box     = "StefanScherer/windows_2022_docker"
     cfg.vm.provision "shell", path: "scripts/create-machine.ps1", args: "-machineHome #{home} -machineName 2022-box"
+    cfg.vm.provider "virtualbox" do |v, override|
+      override.vm.network :private_network, ip: "192.168.59.52", gateway: "192.168.56.1"
+    end
   end
 
   config.vm.define "insider", autostart: false do |cfg|
@@ -96,7 +105,6 @@ Vagrant.configure("2") do |config|
     v.customize ["modifyvm", :id, "--nested-hw-virt", "on"]
     # Use the recommended paravirtualization interface for windows (hyperv) - requires VirtualBox 6
     v.customize ["modifyvm", :id, "--paravirtprovider", "hyperv"]
-    override.vm.network :private_network, ip: "192.168.59.90", gateway: "192.168.56.1"
   end
 
   config.vm.provider "hyperv" do |v|
