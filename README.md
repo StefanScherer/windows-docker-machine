@@ -12,6 +12,8 @@ containers and the Windows containers.
 There are several versions of Windows Server. This is where you
 decide which Vagrant VM should be started.
 
+* `2022-box` - Windows Server 2022 (10.0.20348) LTS Channel, ___***prebuilt from Vagrant Cloud***___
+* `2022` - Windows Server 2022 (10.0.20348) LTS Channel
 * `2019-box` - Windows Server 2019 (10.0.17763) LTS Channel, ___***prebuilt from Vagrant Cloud***___
 * `2019` - Windows Server 2019 (10.0.17763) LTS Channel
 * `1903` - Windows Server, version 1903 (10.0.18362) Semi-Annual Channel
@@ -26,13 +28,18 @@ So with a `vagrant up 2019` you spin up the LTS version, with `vagrant up 1903`
 the 1903 semi-annual version and with `vagrant up insider` the Insider build.
 
 If you don't want to run the **packer** step, you can run `vagrant up 2019-box`
-and get your box downloaded directly from [Vagrant Cloud](https://app.vagrantup.com/StefanScherer/boxes/windows_2019_docker).
+or `vagrant up 2022-box` to get your box image downloaded directly from Vagrant
+Cloud. That uses the box images [windows_2019_docker], respectively
+[windows_2022_docker].
 
-Tested environments
+[windows_2019_docker]: https://app.vagrantup.com/StefanScherer/boxes/windows_2019_docker
+[windows_2022_docker]: https://app.vagrantup.com/StefanScherer/boxes/windows_2022_docker
 
-* macOS with Vagrant 2.2.4
+## Tested environments
+
+* macOS with Vagrant 2.2.19
   * VMware Fusion Pro 11.0.3
-  * VirtualBox 5.2.26
+  * VirtualBox 5.2.26 and 6.1.34
 * Windows with Vagrant 2.2.4
   * VMware Workstation Pro 15.0.3
   * (VirtualBox see issue
@@ -40,16 +47,18 @@ Tested environments
   * (Hyper-V see issue
     [#1](https://github.com/StefanScherer/windows-docker-machine/issues/1))
 
-#### Before you begin
+## Getting started
 
-First you need the Windows Server 2019 VM for your hypervisor. I prefer
+First you need a Windows Server VM for your hypervisor. I prefer
 "Infrastructure as Code", so every build step is available on GitHub.
 
 ![packer vagrant docker](images/packer_vagrant_docker.png)
 
 1. (optional) **packer build** to build a Vagrant base box, it's like a Docker image, but
    for Vagrant VM's. 
-2. **vagrant up** to create a running VM instance of Windows Server, either using the `packer build` or by using one of the pre-built vagrant cloud binaries: `2019-box` or `2016-box`.
+2. **vagrant up** to create a running VM instance of Windows Server, either using the
+   `packer build` or by using one of the pre-built Vagrant Cloud binaries
+   `2022-box`, `2019-box`, or `2016-box`.
 3. **docker run** to run Windows containers in that Windows VM
 
 Step 1 (building the headless Vagrant box) can be done with these steps:
@@ -57,6 +66,11 @@ Step 1 (building the headless Vagrant box) can be done with these steps:
 ```bash
 $ git clone https://github.com/StefanScherer/packer-windows
 $ cd packer-windows
+
+$ packer build --only=vmware-iso windows_2022_docker.json
+$ vagrant box add windows_2022_docker windows_2022_docker_vmware.box
+
+- or -
 
 $ packer build --only=vmware-iso windows_2019_docker.json
 $ vagrant box add windows_2019_docker windows_2019_docker_vmware.box
@@ -94,8 +108,8 @@ swap `vmware` for `virtualbox` in the vagrant commands above.
 
 ### Create the Docker Machine
 
-Spin up the headless Vagrant box you created earlier with Windows Server 2019 and Docker EE
-installed. It will create the TLS certs and create a `2019-box` Docker context (new with Docker 19.03) and docker-machine configuration on your Mac.
+Spin up the headless Vagrant box you created earlier. It will create the TLS
+certificates and a corresponding Docker context called `2022-box` or `2019-box`.
 
 ```bash
 $ git clone https://github.com/StefanScherer/windows-docker-machine
@@ -106,6 +120,9 @@ $ vagrant up --provider vmware_desktop 2019-box
 
 $ vagrant up --provider virtualbox 2019-box
 ```
+
+If you want to use Windows Server 2022, type `2022-box` here instead.
+
 
 ### List your new Docker machine
 
@@ -186,7 +203,7 @@ Just use `C:$(pwd)` to prepend a drive letter.
 $ docker run -it -v C:$(pwd):C:$(pwd) mcr.microsoft.com/windows/servercore:1809 powershell
 ```
 
-Yes, this mounts the current directory through the Windows 2019 VM into the
+This mounts the current working directory through the Windows VM into the
 Windows Container.
 
 ### Accessing published ports of Windows containers
@@ -208,8 +225,8 @@ $ open http://$(docker-machine ip 2019-box):8080
 
 ## Working on Windows
 
-Spin up the headless Vagrant box you created earlier with Windows Server 2019 and Docker EE
-installed. It will create the TLS certs and create a `2019-box` Docker context and docker-machine configuration on your Windows host.
+Spin up the headless Vagrant box you created earlier. It will create the TLS
+certificates and a corresponding Docker context called `2022-box` or `2019-box`.
 
 If you haven't worked with `docker context` yet, create the `.docker` directory
 in your user profile manually.
@@ -236,7 +253,9 @@ PS C:\> vagrant up --provider virtualbox 2019-box
 PS C:\> vagrant up --provider hyperv 2019-box
 ```
 
-Notice: The provider `hyperv` does mount the volumes with SMB into the Windows Server 2019
+If you want to use Windows Server 2022, type `2022-box` here instead.
+
+Notice: The provider `hyperv` does mount the volumes with SMB into the Windows Server
 VM. It seems that there is a problem mounting that further into a Windows
 container. The provisioning (creating the TLS certs and copying them back to the
 Windows host) will fail.
@@ -320,7 +339,7 @@ Just use `$(pwd)` in PowerShell.
 PS C:\> docker run -it -v "$(pwd):$(pwd)" mcr.microsoft.com/windows/servercore:1809 powershell
 ```
 
-Yes, this mounts the current directory through the Windows 2019 VM into the
+This mounts the current working directory through the Windows VM into the
 Windows Container.
 
 ### Accessing published ports of Windows containers
