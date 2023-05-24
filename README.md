@@ -104,7 +104,7 @@ $ vagrant box add windows_2016_docker windows_2016_docker_vmware.box
 Of course you can build only the box version you need. If you are using VirtualBox instead of VMware,
 swap `vmware` for `virtualbox` in the vagrant commands above.
 
-## Working on macOS
+## Working on macOS & Linux
 
 ### Create the Docker Machine
 
