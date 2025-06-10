@@ -15,6 +15,7 @@ decide which Vagrant VM should be started.
 * `2022-box` - Windows Server 2022 (10.0.20348) LTS Channel, ___***prebuilt from Vagrant Cloud***___
 * `2022` - Windows Server 2022 (10.0.20348) LTS Channel
 * `2019-box` - Windows Server 2019 (10.0.17763) LTS Channel, ___***prebuilt from Vagrant Cloud***___
+* `2019-box-resized` - The above, with a 80G->150G resized disk.
 * `2019` - Windows Server 2019 (10.0.17763) LTS Channel
 * `1903` - Windows Server, version 1903 (10.0.18362) Semi-Annual Channel
 * `1809` - Windows Server, version 1809 (10.0.17763) Semi-Annual Channel
